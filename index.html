@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>바이브 코딩 시작 프롬프트 100선 — AICLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000000;
+  --white: #FFFFFF;
+  --red: #FF0000;
+  --royal-blue: #0048BA;
+  --card-bg: #111111;
+  --card-hover: #1a1a1a;
+  --text-gray: #AAAAAA;
+  --text-dim: #666666;
+  --font-title: 'Black Han Sans', sans-serif;
+  --font-body: 'Noto Sans KR', sans-serif;
+  --font-accent: 'Bebas Neue', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(50px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes bounceIn {
+  0% { opacity: 0; transform: translateY(50px) scale(0.8); }
+  60% { opacity: 1; transform: translateY(-8px) scale(1.05); }
+  80% { transform: translateY(3px) scale(0.98); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,0,0,0.3), 0 0 40px rgba(255,0,0,0.1); }
+  50% { text-shadow: 0 0 30px rgba(255,0,0,0.5), 0 0 60px rgba(255,0,0,0.2); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px) rotate(-1deg); }
+  75% { transform: translateX(3px) rotate(1deg); }
+}
+@keyframes copySuccess {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-30px); }
+}
+
+/* ===== NOISE OVERLAY ===== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  z-index: 100;
+}
+.top-bar .brand {
+  font-family: var(--font-accent);
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--white);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(10px);
+}
+.top-bar .brand.show { opacity: 1; transform: translateY(0); }
+.top-bar .brand span { color: var(--red); }
+.btn-guide {
+  background: transparent;
+  border: 1px solid var(--text-dim);
+  color: var(--text-gray);
+  padding: 8px 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+.btn-guide.show { opacity: 1; transform: translateY(0); }
+.btn-guide:hover {
+  border-color: var(--red);
+  color: var(--white);
+  box-shadow: 0 0 15px rgba(255,0,0,0.2);
+}
+
+/* ===== INTRO OVERLAY ===== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.6s ease;
+}
+.intro-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.intro-overlay.hidden { display: none; }
+.intro-counter {
+  font-family: var(--font-accent);
+  font-size: clamp(80px, 20vw, 200px);
+  color: var(--red);
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(255,0,0,0.4), 0 0 80px rgba(255,0,0,0.2);
+}
+.intro-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  margin-top: 16px;
+}
+.intro-bar {
+  width: 200px;
+  height: 2px;
+  background: #222;
+  margin-top: 30px;
+  overflow: hidden;
+  position: relative;
+}
+.intro-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--red);
+  width: 0;
+  transition: width 0.3s linear;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  padding: 3vh 20px 40px;
+  overflow: hidden;
+  background: var(--black);
+}
+
+/* 스파이럴 캔버스 배경 */
+.hero-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-canvas-wrap canvas {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 이미지 오버레이 */
+.hero-img-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: url('JyvBZROg.jpeg') center center / cover no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.hero > *:not(.hero-canvas-wrap):not(.hero-img-overlay) {
+  position: relative;
+  z-index: 3;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-weight: 400;
+  line-height: 1.35;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+.hero-line {
+  display: block;
+  font-size: clamp(45px, 10vw, 126px);
+  overflow: hidden;
+  min-height: 1.3em;
+  -webkit-text-stroke: 0;
+  paint-order: stroke fill;
+}
+.hero-line .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(50px) scale(0.8);
+  transition: none;
+}
+.hero-line .char.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.hero-line .char.settled {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+.hero-line.accent {
+  color: var(--red);
+}
+.hero-line.accent.glow {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(25px, 3.5vw, 46px);
+  font-weight: 300;
+  color: var(--royal-blue);
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+  margin-bottom: 10px;
+}
+.hero-sub.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-sub-small {
+  font-family: var(--font-body);
+  font-size: clamp(21px, 2.8vw, 34px);
+  font-weight: 300;
+  color: var(--text-gray);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+  margin-bottom: 50px;
+}
+.hero-sub-small.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-cta {
+  position: relative;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+.scroll-cta.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scroll-cta a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-gray);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+}
+.scroll-cta a:hover { color: var(--white); }
+.scroll-cta .arrow {
+  font-size: 24px;
+  animation: float 2s ease-in-out infinite;
+}
+
+/* ===== STICKY HEADER ===== */
+.sticky-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--red);
+  padding: 12px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sticky-header.visible {
+  transform: translateY(0);
+}
+.sticky-header .brand {
+  font-family: var(--font-accent);
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+.sticky-header .brand span { color: var(--red); }
+.sticky-header .title {
+  font-family: var(--font-title);
+  font-size: 16px;
+  color: var(--text-gray);
+}
+.btn-toggle-all {
+  background: transparent;
+  border: 1px solid var(--text-dim);
+  color: var(--text-gray);
+  padding: 6px 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-toggle-all:hover {
+  border-color: var(--royal-blue);
+  color: var(--white);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.modal {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 50px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal {
+  transform: scale(1);
+}
+.modal h2 {
+  font-family: var(--font-title);
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: var(--white);
+}
+.modal h2 span { color: var(--red); }
+.modal-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.modal-step-num {
+  font-family: var(--font-accent);
+  font-size: 36px;
+  color: var(--royal-blue);
+  line-height: 1;
+  min-width: 36px;
+}
+.modal-step-text {
+  font-size: 16px;
+  color: var(--text-gray);
+  line-height: 1.6;
+  padding-top: 6px;
+}
+.modal-step-text strong { color: var(--white); }
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--white); }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+.section-count {
+  font-family: var(--font-accent);
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+}
+.section-count.visible {
+  animation: fadeInUp 0.6s ease forwards;
+}
+.section-count span { color: var(--red); font-size: 24px; }
+
+/* ===== ACCORDION ===== */
+.accordion-item {
+  margin-bottom: 2px;
+}
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  background: #080808;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  user-select: none;
+  border-left: 4px solid transparent;
+}
+.accordion-header:hover {
+  background: #0e0e0e;
+  border-left-color: var(--red);
+}
+.accordion-header.active {
+  border-left-color: var(--red);
+  background: #0e0e0e;
+}
+.accordion-icon {
+  width: 12px;
+  height: 12px;
+  background: var(--text-dim);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.accordion-header:hover .accordion-icon,
+.accordion-header.active .accordion-icon {
+  background: var(--red);
+  transform: scale(1.2);
+}
+.accordion-title {
+  flex: 1;
+  font-family: var(--font-title);
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+.accordion-count {
+  font-family: var(--font-accent);
+  font-size: 16px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+.accordion-arrow {
+  font-size: 14px;
+  color: var(--text-dim);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+.accordion-header.active .accordion-arrow {
+  transform: rotate(90deg);
+  color: var(--red);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.accordion-body-inner {
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* ===== PROMPT CARD ===== */
+.prompt-card {
+  background: var(--card-bg);
+  padding: 20px 24px;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  opacity: 0;
+}
+.prompt-card.revealed {
+  animation: cardReveal 0.4s ease forwards;
+}
+.prompt-card:hover {
+  background: var(--card-hover);
+}
+.prompt-card[data-level="쉬움"] { border-left-color: transparent; }
+.prompt-card[data-level="쉬움"]:hover { border-left-color: var(--royal-blue); }
+.prompt-card[data-level="보통"] { border-left-color: transparent; }
+.prompt-card[data-level="보통"]:hover { border-left-color: var(--red); }
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.badge {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+.badge-easy {
+  background: rgba(0, 72, 186, 0.2);
+  color: var(--royal-blue);
+  border: 1px solid rgba(0, 72, 186, 0.3);
+}
+.badge-normal {
+  background: rgba(255, 0, 0, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+.card-number {
+  font-family: var(--font-accent);
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.card-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  color: var(--white);
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--text-gray);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #333;
+  color: var(--text-dim);
+  padding: 5px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.btn-copy:hover {
+  border-color: var(--royal-blue);
+  color: var(--royal-blue);
+}
+.btn-copy .copy-icon {
+  font-size: 13px;
+}
+.copy-toast {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--royal-blue);
+  font-weight: 500;
+  pointer-events: none;
+  animation: copySuccess 0.8s ease forwards;
+  white-space: nowrap;
+}
+
+/* ===== PROMPT PREVIEW ===== */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #333;
+  color: var(--text-dim);
+  padding: 5px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-preview:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+.btn-preview.active {
+  border-color: var(--red);
+  color: var(--red);
+}
+.prompt-preview {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  background: #0a0a0a;
+  border-left: 2px solid #333;
+  margin-top: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-gray);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 0 14px;
+}
+.prompt-preview.open {
+  max-height: 500px;
+  padding: 14px;
+  margin-top: 12px;
+  border-left-color: var(--red);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 60px 20px 40px;
+  border-top: 1px solid #111;
+}
+.footer-brand {
+  font-family: var(--font-accent);
+  font-size: 24px;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+.footer-brand span { color: var(--red); }
+.footer-links {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.footer-links a {
+  color: var(--text-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--royal-blue); }
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .top-bar { padding: 14px 20px; }
+  .top-bar .brand { font-size: 22px; }
+  .accordion-body-inner {
+    grid-template-columns: 1fr;
+  }
+  .accordion-header { padding: 14px 16px; gap: 12px; }
+  .accordion-title { font-size: 17px; }
+  .sticky-header { padding: 10px 20px; }
+  .sticky-header .title { display: none; }
+  .modal { padding: 30px; }
+  .hero { padding: 70px 16px 40px; }
+}
+@media (max-width: 480px) {
+  .top-bar .brand { font-size: 18px; letter-spacing: 1px; }
+  .btn-guide { padding: 6px 12px; font-size: 12px; }
+  .prompt-card { padding: 16px; }
+  .card-title { font-size: 15px; }
+  .sticky-header .brand { font-size: 16px; }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero-line .char { opacity: 1; }
+  .hero-sub, .hero-sub-small, .scroll-cta,
+  .top-bar .brand, .btn-guide { opacity: 1; }
+  .prompt-card { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO OVERLAY -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-counter" id="introCounter">100</div>
+  <div class="intro-text">VIBE CODING PROMPTS</div>
+  <div class="intro-bar"><div class="intro-bar-fill" id="introBarFill"></div></div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="brand">AIC<span>L</span>AB</div>
+  <button class="btn-guide" onclick="openModal()">사용법</button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-canvas-wrap">
+    <canvas id="spiralCanvas"></canvas>
+  </div>
+  <div class="hero-img-overlay"></div>
+  <h1 class="hero-title">
+    <span class="hero-line" data-text="코딩 몰라도 된다."></span>
+    <span class="hero-line" data-text="붙여넣기만 하면"></span>
+    <span class="hero-line accent" data-text="웹앱이 나온다."></span>
+  </h1>
+  <p class="hero-sub">바이브 코딩 시작 프롬프트 100선</p>
+  <p class="hero-sub-small">AI 시대, 누구나 개발자 &mdash; AICLab</p>
+  <div class="scroll-cta">
+    <a href="#content">
+      프롬프트 둘러보기
+      <span class="arrow">&#9660;</span>
+    </a>
+  </div>
+</section>
+
+<!-- STICKY HEADER -->
+<div class="sticky-header" id="stickyHeader">
+  <div class="brand">AIC<span>L</span>AB</div>
+  <div class="title">바이브 코딩 100선</div>
+  <button class="btn-toggle-all" id="btnToggleAll" onclick="toggleAll()">전체 펼치기</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2>사용<span>법</span></h2>
+    <div class="modal-step">
+      <div class="modal-step-num">1</div>
+      <div class="modal-step-text">원하는 <strong>분야를 클릭</strong>하여 프롬프트 목록을 펼치세요</div>
+    </div>
+    <div class="modal-step">
+      <div class="modal-step-num">2</div>
+      <div class="modal-step-text">마음에 드는 프롬프트의 <strong>복사 버튼</strong>을 누르세요</div>
+    </div>
+    <div class="modal-step">
+      <div class="modal-step-num">3</div>
+      <div class="modal-step-text">AI 채팅창에 <strong>붙여넣기 → 바로 실행!</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main-content" id="content">
+  <div class="section-count" id="sectionCount">
+    <span>14</span> CATEGORIES &middot; <span>100</span> PROMPTS
+  </div>
+  <div id="accordionContainer"></div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">AIC<span>L</span>AB</div>
+  <div class="footer-links">
+    <a href="mailto:info@aiclab2020.com">info@aiclab2020.com</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://kimjinsoo.aiclab.kr/" target="_blank" rel="noopener">kimjinsoo.aiclab.kr</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 KAEA &amp; AICLab. 김진수</div>
+</footer>
+
+<script>
+// ===== PROMPT DATA =====
+const categories = [
+  {
+    name: "일상생활",
+    count: 10,
+    prompts: [
+      { id: 1, level: "쉬움", title: "가계부 자동 계산기", desc: "수입·지출을 입력하면 잔액과 카테고리별 합계를 자동 계산", prompt: "▶ 01. [쉬움] 가계부 자동 계산기\n\n가계부 자동 계산기 웹앱을 만들어 주세요.\n수입과 지출 항목(날짜, 금액, 카테고리, 메모)을 입력하면 월별 잔액, 카테고리별 지출 합계를 자동으로 보여주는 단일 HTML 파일입니다.\n항목 추가·삭제가 되고 합계가 실시간으로 바뀌면 좋겠습니다.\n제게 더 필요한 정보가 있다면 바로 1-2개의 핵심 질문을 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 2, level: "쉬움", title: "D-day 카운터", desc: "목표 날짜를 입력하면 남은 날을 실시간으로 보여주는 카운터", prompt: "▶ 02. [쉬움] D-day 카운터\n\nD-day 카운터 웹앱을 만들어 주세요.\n이벤트 이름과 목표 날짜를 입력하면 오늘부터 남은 일수를 크게 표시하고, 여러 개의 D-day를 동시에 관리할 수 있는 단일 HTML 파일입니다.\n지난 날짜는 'D+N'으로 표시해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 3, level: "쉬움", title: "쇼핑 리스트 앱", desc: "항목을 추가하고 구매 완료 체크를 할 수 있는 쇼핑 리스트", prompt: "▶ 03. [쉬움] 쇼핑 리스트 앱\n\n쇼핑 리스트 웹앱을 만들어 주세요.\n구매할 항목과 수량을 입력하면 리스트에 추가되고, 구매 완료 시 체크 표시로 완료 처리가 되는 단일 HTML 파일입니다.\n카테고리별로 묶어서 보여주고, 완료된 항목은 하단으로 이동하면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 4, level: "보통", title: "습관 트래커", desc: "매일 목표 습관을 체크하고 연속 달성 일수를 추적하는 도구", prompt: "▶ 04. [보통] 습관 트래커\n\n습관 트래커 웹앱을 만들어 주세요.\n매일 실천할 습관 목록을 설정하고, 날마다 체크인을 하면 연속 달성 일수(스트릭)와 이번 달 달성률을 보여주는 단일 HTML 파일입니다.\n달력 형태로 체크 현황을 시각화해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 5, level: "쉬움", title: "타이머·스톱워치", desc: "뽀모도로 타이머와 스톱워치 기능을 제공하는 집중력 도구", prompt: "▶ 05. [쉬움] 타이머·스톱워치\n\n뽀모도로 타이머 + 스톱워치 웹앱을 만들어 주세요.\n25분 집중 / 5분 휴식 사이클을 자동으로 돌아주고, 스톱워치 탭도 별도로 있는 단일 HTML 파일입니다.\n남은 시간을 크게 표시하고 시간 종료 시 알림음이 나면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 6, level: "보통", title: "독서 기록 앱", desc: "읽은 책과 독서 상태를 기록하고 통계로 보여주는 독서 관리 앱", prompt: "▶ 06. [보통] 독서 기록 앱\n\n독서 기록 웹앱을 만들어 주세요.\n책 제목, 저자, 시작일, 완독일, 별점, 한줄 감상을 입력하면 독서 목록이 만들어지고, 읽는 중·완독·읽을 예정으로 분류해서 볼 수 있는 단일 HTML 파일입니다.\n월별 완독 권수 차트도 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 7, level: "쉬움", title: "단위 변환기", desc: "길이·무게·온도·화폐 등 다양한 단위를 즉시 변환하는 도구", prompt: "▶ 07. [쉬움] 단위 변환기\n\n단위 변환기 웹앱을 만들어 주세요.\n길이(km↔mile), 무게(kg↔lb), 온도(℃↔℉), 화폐(원↔달러·엔) 변환을 탭으로 선택하고 숫자를 입력하면 즉시 결과가 나오는 단일 HTML 파일입니다.\n숫자를 바꾸면 실시간으로 변환 결과가 업데이트되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 8, level: "보통", title: "일기 작성 앱", desc: "날마다 일기를 쓰고 감정과 날씨를 기록하는 개인 일기 도구", prompt: "▶ 08. [보통] 일기 작성 앱\n\n개인 일기 웹앱을 만들어 주세요.\n날짜별로 일기를 쓰고, 그날의 감정(이모지 선택)과 날씨를 함께 기록하는 단일 HTML 파일입니다.\n달력에서 날짜를 클릭하면 해당 날의 일기를 볼 수 있고, 키워드로 검색도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 81, level: "쉬움", title: "오늘 뭐 먹지 랜덤 메뉴 추천기", desc: "음식 카테고리와 분위기를 선택하면 오늘의 메뉴를 랜덤으로 추천", prompt: "▶ 81. [쉬움] 오늘 뭐 먹지 랜덤 메뉴 추천기\n\n오늘 뭐 먹지 랜덤 메뉴 추천기 웹앱을 만들어 주세요.\n음식 종류(한식·양식·중식·일식), 분위기(혼밥·데이트·회식), 가격대(저렴·보통·특별)를 선택하고 '뭐 먹을까?' 버튼을 누르면 메뉴를 랜덤으로 추천하는 단일 HTML 파일입니다.\n싫어요 누르면 다른 메뉴를 추천해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 99, level: "보통", title: "반려동물 건강 기록기", desc: "반려동물의 체중·건강 상태·병원 방문을 날짜별로 기록하는 건강 수첩", prompt: "▶ 99. [보통] 반려동물 건강 기록기\n\n반려동물 건강 기록 웹앱을 만들어 주세요.\n반려동물 이름, 종류, 생년월일을 등록하고, 날짜별로 체중, 식욕(좋음·보통·나쁨), 활동량, 특이사항, 병원 방문 기록을 입력하면 체중 변화 그래프와 월별 건강 달력을 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "업무·생산성",
+    count: 10,
+    prompts: [
+      { id: 9, level: "쉬움", title: "To-Do 리스트 앱", desc: "할 일을 추가하고 우선순위와 마감일을 관리하는 작업 관리 도구", prompt: "▶ 09. [쉬움] To-Do 리스트 앱\n\nTo-Do 리스트 웹앱을 만들어 주세요.\n할 일 항목, 우선순위(높음·보통·낮음), 마감일을 입력하면 리스트에 추가되고, 완료 체크와 삭제가 되는 단일 HTML 파일입니다.\n우선순위별로 색상을 다르게 표시하고, 마감 임박 항목은 강조해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 10, level: "보통", title: "칸반 보드", desc: "할 일·진행 중·완료 세 열로 작업을 드래그해 관리하는 프로젝트 보드", prompt: "▶ 10. [보통] 칸반 보드\n\n칸반 보드 웹앱을 만들어 주세요.\n할 일·진행 중·완료 세 개의 열에 카드를 추가하고 드래그 앤 드롭으로 이동시킬 수 있는 단일 HTML 파일입니다.\n각 카드에 제목, 담당자, 마감일을 입력할 수 있고 열별 카드 수가 표시되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 11, level: "쉬움", title: "회의 안건 생성기", desc: "회의 목적과 참석자를 입력하면 구조화된 안건과 시간 배분을 자동 생성", prompt: "▶ 11. [쉬움] 회의 안건 생성기\n\n회의 안건 자동 생성 웹앱을 만들어 주세요.\n회의 목적, 참석자 역할, 총 회의 시간을 입력하면 안건 항목과 각 항목별 시간 배분이 포함된 회의 안건표를 자동으로 만들어주는 단일 HTML 파일입니다.\n결과를 복사하거나 인쇄할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 12, level: "보통", title: "프로젝트 타임라인 뷰어", desc: "프로젝트 일정과 담당자를 입력하면 간트 차트 형식으로 시각화", prompt: "▶ 12. [보통] 프로젝트 타임라인 뷰어\n\n프로젝트 타임라인(간트 차트) 웹앱을 만들어 주세요.\n작업명, 시작일, 종료일, 담당자를 입력하면 가로 막대 형식의 간트 차트로 일정을 시각화하는 단일 HTML 파일입니다.\n오늘 날짜 기준선이 표시되고 담당자별 색상이 다르면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 13, level: "쉬움", title: "명함 정보 정리기", desc: "명함 정보를 입력하면 연락처 카드로 정리하고 검색할 수 있는 도구", prompt: "▶ 13. [쉬움] 명함 정보 정리기\n\n명함 정보 정리 웹앱을 만들어 주세요.\n이름, 회사, 직함, 전화번호, 이메일, 메모를 입력하면 카드 형식으로 저장되고, 이름이나 회사로 검색할 수 있는 단일 HTML 파일입니다.\n회사별로 그룹 정렬도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 14, level: "보통", title: "업무 시간 기록기", desc: "프로젝트별로 작업 시간을 기록하고 일별·주별 시간 합계를 보여주는 도구", prompt: "▶ 14. [보통] 업무 시간 기록기\n\n업무 시간 기록 웹앱을 만들어 주세요.\n프로젝트명과 작업 내용을 입력하고 시작/종료 버튼으로 시간을 기록하면, 프로젝트별·날짜별 총 작업 시간 합계와 차트를 보여주는 단일 HTML 파일입니다.\n오늘 총 근무 시간도 크게 표시해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 15, level: "쉬움", title: "비밀번호 강도 체커", desc: "입력한 비밀번호의 보안 강도를 분석하고 개선 방안을 알려주는 도구", prompt: "▶ 15. [쉬움] 비밀번호 강도 체커\n\n비밀번호 강도 체커 웹앱을 만들어 주세요.\n비밀번호를 입력하면 강도(매우 약함·약함·보통·강함·매우 강함)를 색상 게이지로 보여주고, 길이·대소문자·숫자·특수문자 포함 여부를 체크리스트로 표시하는 단일 HTML 파일입니다.\n강한 비밀번호 예시도 생성해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 16, level: "보통", title: "이메일 서명 생성기", desc: "이름·직함·연락처를 입력하면 HTML 이메일 서명 코드를 자동 생성", prompt: "▶ 16. [보통] 이메일 서명 생성기\n\n이메일 서명 생성기 웹앱을 만들어 주세요.\n이름, 직함, 회사, 전화번호, 이메일, 웹사이트를 입력하면 여러 디자인 스타일(미니멀·컬러·카드형) 중 선택해서 HTML 이메일 서명 코드를 생성하고 미리보기를 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 82, level: "쉬움", title: "업무 일지 자동 정리기", desc: "오늘 한 일을 키워드로 입력하면 보고 가능한 업무 일지 형식으로 정리", prompt: "▶ 82. [쉬움] 업무 일지 자동 정리기\n\n업무 일지 자동 정리기 웹앱을 만들어 주세요.\n오늘 처리한 업무를 키워드나 문장으로 입력하면 '완료한 일 / 진행 중인 일 / 내일 할 일' 세 섹션으로 나눠 보고용 업무 일지 형식으로 자동 정리하고, 복사 버튼이 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 95, level: "쉬움", title: "회의 시간 비용 계산기", desc: "참석자 수와 평균 연봉을 입력하면 회의 1시간의 실제 비용을 계산", prompt: "▶ 95. [쉬움] 회의 시간 비용 계산기\n\n회의 비용 계산기 웹앱을 만들어 주세요.\n회의 참석 인원, 평균 연봉(또는 시급), 회의 진행 시간을 입력하면 이 회의에 든 인건비 비용을 계산하고, 회의가 길어질수록 실시간으로 올라가는 비용 카운터를 보여주는 단일 HTML 파일입니다.\n'이 회의가 꼭 필요했을까?' 버튼도 있으면 재미있겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "교육·학습",
+    count: 10,
+    prompts: [
+      { id: 17, level: "쉬움", title: "단어 암기 플래시카드", desc: "앞면에 단어, 뒷면에 뜻을 넣고 클릭으로 뒤집는 플래시카드 학습 도구", prompt: "▶ 17. [쉬움] 단어 암기 플래시카드\n\n플래시카드 단어 암기 웹앱을 만들어 주세요.\n앞면(단어/질문)과 뒷면(뜻/답)을 입력하면 플래시카드 세트를 만들고, 카드를 클릭하면 뒤집히는 애니메이션으로 암기할 수 있는 단일 HTML 파일입니다.\n'알았어요'/'모르겠어요' 버튼으로 카드를 분류하고 정답률도 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 18, level: "보통", title: "사지선다 퀴즈 앱", desc: "문제와 보기를 입력하면 퀴즈를 만들고 점수를 채점해주는 도구", prompt: "▶ 18. [보통] 사지선다 퀴즈 앱\n\n사지선다 퀴즈 웹앱을 만들어 주세요.\n문제, 보기 4개, 정답을 입력해서 퀴즈 세트를 만들면, 한 문제씩 풀고 즉시 정오답 피드백을 받으며, 최종 점수와 틀린 문제 복습 화면이 나오는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 19, level: "쉬움", title: "구구단 연습 앱", desc: "구구단을 랜덤 문제로 연습하고 맞힌 속도를 기록하는 학습 앱", prompt: "▶ 19. [쉬움] 구구단 연습 앱\n\n구구단 연습 웹앱을 만들어 주세요.\n2단부터 9단까지 선택하거나 전체 랜덤으로 문제를 내면 답을 입력하고, 정답 여부와 소요 시간을 기록해 최고 기록을 보여주는 단일 HTML 파일입니다.\n어린이가 쓰기 좋은 밝고 재미있는 디자인으로 만들어 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 20, level: "보통", title: "마인드맵 시각화 도구", desc: "중심 주제와 하위 아이디어를 입력하면 마인드맵을 자동으로 시각화", prompt: "▶ 20. [보통] 마인드맵 시각화 도구\n\n마인드맵 시각화 웹앱을 만들어 주세요.\n중심 주제를 입력하고 하위 항목을 추가하면 방사형 마인드맵이 자동으로 그려지는 단일 HTML 파일입니다.\n노드를 클릭하면 하위 항목을 추가할 수 있고, 배경색과 선 색상을 조정할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 21, level: "쉬움", title: "국가·수도 퀴즈", desc: "세계 나라 이름과 수도를 맞히는 지리 퀴즈 학습 앱", prompt: "▶ 21. [쉬움] 국가·수도 퀴즈\n\n국가·수도 맞히기 퀴즈 웹앱을 만들어 주세요.\n'이 나라의 수도는?' 또는 '이 도시는 어느 나라 수도?' 형식으로 랜덤 문제가 나오고, 보기 4개 중 하나를 고르면 정오답 피드백과 점수를 보여주는 단일 HTML 파일입니다.\n대륙별 난이도 설정도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 22, level: "보통", title: "단어 받아쓰기 연습기", desc: "영단어 목록을 입력하면 철자를 연습하는 받아쓰기 도구", prompt: "▶ 22. [보통] 단어 받아쓰기 연습기\n\n영단어 받아쓰기 연습 웹앱을 만들어 주세요.\n연습할 단어 목록을 입력하면 단어가 3초 표시됐다 사라지고, 기억해서 철자를 입력하면 정오답을 채점해주는 단일 HTML 파일입니다.\n틀린 단어는 자동으로 오답 노트에 저장되고 반복 연습할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 23, level: "쉬움", title: "타자 속도 연습기", desc: "문장을 보고 따라 입력하며 타자 속도(WPM)와 정확도를 측정하는 앱", prompt: "▶ 23. [쉬움] 타자 속도 연습기\n\n타자 속도 연습 웹앱을 만들어 주세요.\n화면에 나타나는 문장을 따라 입력하면 분당 타자 수(WPM), 정확도(%)를 실시간으로 측정하고 완료 후 결과를 보여주는 단일 HTML 파일입니다.\n한국어와 영어 연습 문장을 선택해서 쓸 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 24, level: "보통", title: "학습 목표 트래커", desc: "과목별 학습 목표와 진도를 입력하면 달성률을 시각화하는 도구", prompt: "▶ 24. [보통] 학습 목표 트래커\n\n학습 목표 트래커 웹앱을 만들어 주세요.\n과목명, 목표(예: 단어 300개 암기), 현재 달성량을 입력하면 과목별 진행률 바와 전체 달성률을 보여주는 단일 HTML 파일입니다.\n목표 달성 예정일도 자동으로 계산해서 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 83, level: "쉬움", title: "한자 획순 연습기", desc: "한자를 입력하면 획순 순서와 의미를 보여주는 한자 학습 도구", prompt: "▶ 83. [쉬움] 한자 획순 연습기\n\n한자 학습 도구 웹앱을 만들어 주세요.\n한자를 입력하거나 목록에서 선택하면 획순 번호, 총 획수, 음과 훈, 예문을 보여주는 단일 HTML 파일입니다.\n획 번호를 클릭하면 해당 획이 강조 표시되고, 비슷한 한자 비교도 할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 96, level: "쉬움", title: "역사 연대표 시각화 도구", desc: "역사 사건과 연도를 입력하면 인터랙티브 연대표로 시각화", prompt: "▶ 96. [쉬움] 역사 연대표 시각화 도구\n\n역사 연대표 시각화 웹앱을 만들어 주세요.\n역사적 사건 이름, 연도, 카테고리(정치·문화·전쟁·발명)를 입력하면 가로 타임라인 형식으로 사건들을 시각화하고, 사건을 클릭하면 자세한 설명이 나오는 단일 HTML 파일입니다.\n카테고리별 필터도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "건강·피트니스",
+    count: 8,
+    prompts: [
+      { id: 25, level: "쉬움", title: "BMI 계산기", desc: "키와 몸무게를 입력하면 BMI와 체중 상태를 분석해주는 건강 도구", prompt: "▶ 25. [쉬움] BMI 계산기\n\nBMI 계산기 웹앱을 만들어 주세요.\n키(cm)와 몸무게(kg)를 입력하면 BMI 수치, 체중 상태(저체중·정상·과체중·비만), 정상 체중 범위를 보여주는 단일 HTML 파일입니다.\n슬라이더로 목표 체중을 설정하면 필요한 변화량도 계산해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 26, level: "보통", title: "칼로리 계산기", desc: "음식과 운동을 입력하면 하루 칼로리 섭취·소비 균형을 계산", prompt: "▶ 26. [보통] 칼로리 계산기\n\n칼로리 계산기 웹앱을 만들어 주세요.\n하루 기초대사량(키·몸무게·나이·성별로 계산)을 기반으로, 먹은 음식과 운동을 입력하면 총 섭취 칼로리, 총 소비 칼로리, 칼로리 균형을 막대그래프로 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 27, level: "쉬움", title: "물 마시기 알림 트래커", desc: "하루 목표 물 섭취량과 현재 마신 양을 기록하는 수분 섭취 관리 앱", prompt: "▶ 27. [쉬움] 물 마시기 알림 트래커\n\n물 마시기 트래커 웹앱을 만들어 주세요.\n하루 목표 물 섭취량(ml)을 설정하고, 물을 마실 때마다 버튼을 눌러 기록하면 오늘 총 섭취량과 목표 달성률을 물병 시각화로 보여주는 단일 HTML 파일입니다.\n마신 시간 기록도 남겨주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 28, level: "보통", title: "홈트레이닝 루틴 타이머", desc: "운동 세트와 휴식 시간을 설정하면 자동으로 카운트다운하는 운동 타이머", prompt: "▶ 28. [보통] 홈트레이닝 루틴 타이머\n\n홈트레이닝 루틴 타이머 웹앱을 만들어 주세요.\n운동 이름, 세트 수, 반복 횟수, 세트 간 휴식 시간을 입력하면 운동 세트와 휴식 시간을 자동으로 교대하며 카운트다운해주는 단일 HTML 파일입니다.\n현재 운동/휴식 상태를 크게 표시하고 완료 알림도 넣어주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 29, level: "쉬움", title: "걸음 수 목표 계산기", desc: "하루 목표 걸음 수와 보폭을 입력하면 거리·소비 칼로리를 계산", prompt: "▶ 29. [쉬움] 걸음 수 목표 계산기\n\n걸음 수 계산기 웹앱을 만들어 주세요.\n하루 걸음 수, 보폭(cm), 몸무게를 입력하면 걸은 거리(km), 소비 칼로리, 목표 달성률을 보여주는 단일 HTML 파일입니다.\n주간 걸음 수 기록을 입력해서 막대그래프로 볼 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 30, level: "보통", title: "수면 패턴 기록기", desc: "취침·기상 시간을 기록하고 수면의 질과 패턴을 분석하는 도구", prompt: "▶ 30. [보통] 수면 패턴 기록기\n\n수면 패턴 기록 웹앱을 만들어 주세요.\n취침 시간, 기상 시간, 수면의 질(1~5점), 메모를 날마다 입력하면 평균 수면 시간, 수면 패턴 선 그래프, 주간 수면 점수를 보여주는 단일 HTML 파일입니다.\n최적 취침 시간 추천도 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 84, level: "쉬움", title: "눈 건강 휴식 타이머", desc: "화면 집중 시간을 설정하면 20-20-20 규칙으로 눈 휴식을 알려주는 도구", prompt: "▶ 84. [쉬움] 눈 건강 휴식 타이머\n\n눈 건강 휴식 타이머 웹앱을 만들어 주세요.\n20분마다 알림을 보내서 '20피트(6m) 거리의 물체를 20초간 바라보세요'라는 20-20-20 규칙 안내를 해주고, 오늘 총 눈 휴식 횟수와 총 화면 집중 시간을 기록하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 98, level: "쉬움", title: "명상 가이드 타이머", desc: "명상 시간과 집중 대상을 선택하면 단계별 명상 가이드와 타이머를 제공", prompt: "▶ 98. [쉬움] 명상 가이드 타이머\n\n명상 가이드 타이머 웹앱을 만들어 주세요.\n명상 시간(5분·10분·20분), 명상 유형(호흡·바디스캔·집중)을 선택하면 단계별 안내 텍스트와 진행 원형 타이머를 보여주는 단일 HTML 파일입니다.\n명상 완료 시 오늘 총 명상 시간이 기록되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "요리·음식",
+    count: 6,
+    prompts: [
+      { id: 31, level: "쉬움", title: "레시피 저장 앱", desc: "요리 이름과 재료, 만드는 법을 저장하고 검색하는 개인 레시피북", prompt: "▶ 31. [쉬움] 레시피 저장 앱\n\n개인 레시피 저장 웹앱을 만들어 주세요.\n요리 이름, 재료 목록, 조리 순서, 요리 사진 URL을 입력하면 카드 형식으로 저장되고, 요리 이름이나 재료명으로 검색할 수 있는 단일 HTML 파일입니다.\n카테고리(한식·양식·중식 등) 필터도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 32, level: "보통", title: "식재료 관리 앱", desc: "냉장고에 있는 식재료와 유통기한을 입력하면 만료 임박 알림을 보여주는 도구", prompt: "▶ 32. [보통] 식재료 관리 앱\n\n식재료 관리 웹앱을 만들어 주세요.\n식재료 이름, 수량, 보관 위치(냉장/냉동/실온), 유통기한을 입력하면 만료까지 남은 날수와 함께 목록을 보여주고, 3일 이내 만료 식재료는 빨간색으로 강조하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 33, level: "쉬움", title: "요리 인분 계산기", desc: "레시피 재료 양을 원하는 인분 수에 맞게 자동으로 환산", prompt: "▶ 33. [쉬움] 요리 인분 계산기\n\n요리 인분 계산기 웹앱을 만들어 주세요.\n원래 레시피의 기준 인분과 재료(이름·양·단위)를 입력하면, 원하는 인분 수를 슬라이더로 조정할 때 모든 재료 양이 자동으로 비례 계산되는 단일 HTML 파일입니다.\n결과를 복사할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 34, level: "보통", title: "주간 식단 플래너", desc: "한 주의 아침·점심·저녁 메뉴를 계획하고 장보기 목록을 자동 생성", prompt: "▶ 34. [보통] 주간 식단 플래너\n\n주간 식단 플래너 웹앱을 만들어 주세요.\n월요일부터 일요일까지 아침·점심·저녁 메뉴를 입력하면 주간 식단표가 만들어지고, 필요한 재료를 모아서 장보기 목록을 자동 생성하는 단일 HTML 파일입니다.\n요일별 영양 균형 체크도 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 35, level: "쉬움", title: "커피 레시피 가이드", desc: "커피 종류와 원두량, 물 양을 입력하면 최적 추출 가이드를 보여주는 도구", prompt: "▶ 35. [쉬움] 커피 레시피 가이드\n\n커피 레시피 가이드 웹앱을 만들어 주세요.\n에스프레소·아메리카노·핸드드립·콜드브루 등 커피 종류와 원두량을 선택하면 물 양, 추출 온도, 추출 시간, 단계별 추출 가이드를 보여주는 단일 HTML 파일입니다.\n기록한 레시피를 저장할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 85, level: "쉬움", title: "냉장고 파먹기 레시피 추천기", desc: "있는 재료를 입력하면 그 재료로 만들 수 있는 요리를 추천", prompt: "▶ 85. [쉬움] 냉장고 파먹기 레시피 추천기\n\n냉장고 재료로 만들 수 있는 요리 추천 웹앱을 만들어 주세요.\n현재 냉장고에 있는 재료를 태그로 입력하면, 그 재료들로 만들 수 있는 요리 목록과 간단한 레시피를 추천하는 단일 HTML 파일입니다.\n'오늘 꼭 써야 할 재료' 우선 표시 기능도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "여행·취미",
+    count: 7,
+    prompts: [
+      { id: 36, level: "쉬움", title: "여행 경비 분배기", desc: "여행 경비를 인원수별로 나눠서 각자 내야 할 금액을 계산", prompt: "▶ 36. [쉬움] 여행 경비 분배기\n\n여행 경비 분배 계산기 웹앱을 만들어 주세요.\n여행 참여자 이름을 입력하고, 각 지출 항목(내용, 금액, 결제자, 포함 인원)을 입력하면 사람별 최종 정산 금액과 '누가 누구에게 얼마를 줘야 하는지' 깔끔하게 계산하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 37, level: "보통", title: "여행 체크리스트 생성기", desc: "여행지와 일정을 입력하면 맞춤형 짐 싸기 체크리스트를 자동 생성", prompt: "▶ 37. [보통] 여행 체크리스트 생성기\n\n여행 체크리스트 생성기 웹앱을 만들어 주세요.\n여행지(국내/해외), 여행 기간, 여행 유형(도시·산·바다·비즈니스)을 선택하면 카테고리별(서류·옷·세면도구·전자기기) 짐 싸기 체크리스트를 자동으로 생성하고, 각 항목을 체크할 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 38, level: "쉬움", title: "세계 시간대 변환기", desc: "여러 도시의 현재 시간을 동시에 보여주고 시간대 변환을 도와주는 도구", prompt: "▶ 38. [쉬움] 세계 시간대 변환기\n\n세계 시간대 변환기 웹앱을 만들어 주세요.\n서울·뉴욕·런던·도쿄·시드니 등 주요 도시를 선택하면 현재 시간을 동시에 보여주고, 특정 시간을 입력하면 다른 도시의 해당 시간으로 변환해주는 단일 HTML 파일입니다.\n현재 시간이 자동으로 업데이트되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 39, level: "보통", title: "사진 일정 앨범 정리기", desc: "여행 날짜별로 사진 URL과 메모를 입력하면 타임라인 앨범으로 정리", prompt: "▶ 39. [보통] 사진 일정 앨범 정리기\n\n여행 사진 타임라인 앨범 웹앱을 만들어 주세요.\n날짜, 장소명, 사진 URL, 한줄 메모를 입력하면 날짜 순서대로 타임라인 형식의 여행 앨범이 만들어지는 단일 HTML 파일입니다.\n지도 아이콘과 장소별 컬러 태그가 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 40, level: "쉬움", title: "취미 비용 추적기", desc: "취미 활동에 드는 비용을 기록하고 월별 지출 통계를 보여주는 도구", prompt: "▶ 40. [쉬움] 취미 비용 추적기\n\n취미 비용 추적기 웹앱을 만들어 주세요.\n취미 항목(독서·운동·그림·게임 등), 지출 날짜, 금액, 내용을 입력하면 취미별 총 지출과 월별 추이를 차트로 보여주는 단일 HTML 파일입니다.\n월별 취미 예산도 설정할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 41, level: "보통", title: "독서 모임 관리 앱", desc: "독서 모임 책 목록과 참석자, 다음 모임 일정을 관리하는 도구", prompt: "▶ 41. [보통] 독서 모임 관리 앱\n\n독서 모임 관리 웹앱을 만들어 주세요.\n모임 책 목록(책 제목·선정일·완독 목표일), 참석자 명단, 다음 모임 일정·장소·준비할 토론 주제를 입력하면 모임 정보 페이지를 만들어주는 단일 HTML 파일입니다.\n책별 참석자 별점 집계도 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 86, level: "쉬움", title: "여행지 버킷리스트 관리기", desc: "가고 싶은 여행지를 입력하고 방문 여부를 체크하는 여행 버킷리스트", prompt: "▶ 86. [쉬움] 여행지 버킷리스트 관리기\n\n여행 버킷리스트 웹앱을 만들어 주세요.\n가고 싶은 여행지 이름, 나라, 이유, 사진 URL을 입력하면 카드 형식의 버킷리스트가 만들어지고, 다녀온 곳은 '완료' 처리해서 방문 국가 수와 전체 달성률을 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "창작·미디어",
+    count: 8,
+    prompts: [
+      { id: 42, level: "쉬움", title: "랜덤 글쓰기 주제 생성기", desc: "장르와 키워드를 선택하면 창작 글쓰기 주제를 랜덤으로 생성", prompt: "▶ 42. [쉬움] 랜덤 글쓰기 주제 생성기\n\n랜덤 글쓰기 주제 생성기 웹앱을 만들어 주세요.\n글 장르(단편소설·에세이·시·일기), 분위기(따뜻한·스릴러·코믹), 키워드 태그를 선택하면 창작에 활용할 수 있는 흥미로운 글쓰기 주제 3개를 랜덤으로 생성하는 단일 HTML 파일입니다.\n'다시 생성' 버튼도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 43, level: "보통", title: "유튜브 스크립트 아웃라인 생성기", desc: "영상 주제와 타겟 시청자를 입력하면 유튜브 스크립트 구조를 자동 생성", prompt: "▶ 43. [보통] 유튜브 스크립트 아웃라인 생성기\n\n유튜브 스크립트 아웃라인 생성기 웹앱을 만들어 주세요.\n영상 주제, 영상 길이(분), 타겟 시청자, 채널 스타일(정보·브이로그·튜토리얼)을 입력하면 훅→본론→마무리 구조의 스크립트 아웃라인과 섬네일 제목 아이디어 5개를 생성하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 44, level: "쉬움", title: "컬러 팔레트 생성기", desc: "메인 색상을 선택하면 조화로운 색상 팔레트를 자동으로 추천", prompt: "▶ 44. [쉬움] 컬러 팔레트 생성기\n\n컬러 팔레트 생성기 웹앱을 만들어 주세요.\n색상 휠에서 메인 색상을 선택하면 보색·유사색·삼각 배색 등 여러 조합의 5색 팔레트를 자동으로 생성하고, 각 색상의 HEX·RGB 코드를 클릭 한 번으로 복사할 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 45, level: "보통", title: "소셜미디어 게시 일정 관리기", desc: "채널별 콘텐츠 아이디어와 게시 일정을 캘린더로 관리하는 도구", prompt: "▶ 45. [보통] 소셜미디어 게시 일정 관리기\n\n소셜미디어 콘텐츠 일정 관리 웹앱을 만들어 주세요.\n채널(인스타·유튜브·블로그·X), 게시 예정일, 콘텐츠 제목, 상태(기획·작성·완료)를 입력하면 월간 캘린더와 리스트 뷰로 일정을 관리할 수 있는 단일 HTML 파일입니다.\n채널별 색상 구분도 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 46, level: "쉬움", title: "랜덤 닉네임·캐릭터 이름 생성기", desc: "스타일과 분위기를 선택하면 창작용 이름을 랜덤으로 생성하는 도구", prompt: "▶ 46. [쉬움] 랜덤 닉네임·캐릭터 이름 생성기\n\n랜덤 이름 생성기 웹앱을 만들어 주세요.\n이름 스타일(한국풍·판타지·SF·일본풍), 성별, 분위기(강인한·신비로운·귀여운)를 선택하면 닉네임이나 캐릭터 이름 10개를 랜덤으로 생성하고, 마음에 드는 이름을 저장할 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 47, level: "보통", title: "인용문 모음 앱", desc: "좋아하는 인용구와 출처를 저장하고 카테고리별로 검색하는 도구", prompt: "▶ 47. [보통] 인용문 모음 앱\n\n인용문 모음 웹앱을 만들어 주세요.\n인용문, 작가/출처, 카테고리(동기부여·사랑·철학·유머), 개인 메모를 입력하면 예쁜 카드 형식으로 저장하고, 카테고리 필터와 키워드 검색으로 찾을 수 있는 단일 HTML 파일입니다.\n랜덤 인용구 표시 버튼도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 87, level: "쉬움", title: "감성 명언 카드 생성기", desc: "명언과 배경 스타일을 선택하면 SNS에 올릴 수 있는 감성 카드를 생성", prompt: "▶ 87. [쉬움] 감성 명언 카드 생성기\n\n감성 명언 카드 생성기 웹앱을 만들어 주세요.\n명언 텍스트를 입력하고 배경 색상, 폰트 스타일, 레이아웃을 선택하면 SNS에 공유하기 좋은 감성적인 명언 카드를 미리보기로 생성하고, HTML 코드를 복사할 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 97, level: "보통", title: "간단한 설문 조사 만들기", desc: "질문과 선택지를 입력하면 응답 수집이 가능한 설문 폼을 자동 생성", prompt: "▶ 97. [보통] 간단한 설문 조사 만들기\n\n설문 조사 생성 웹앱을 만들어 주세요.\n설문 제목, 질문 항목(주관식·객관식·1~5점 척도), 선택지를 입력하면 응답 가능한 설문 폼이 만들어지고, 제출된 응답을 집계해서 항목별 결과를 막대그래프로 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "수학·계산",
+    count: 6,
+    prompts: [
+      { id: 48, level: "쉬움", title: "분수·소수 변환 계산기", desc: "분수를 소수로, 소수를 분수로 변환하고 사칙연산을 보여주는 계산기", prompt: "▶ 48. [쉬움] 분수·소수 변환 계산기\n\n분수·소수 변환 계산기 웹앱을 만들어 주세요.\n분수(분자/분모)를 입력하면 소수로 변환하고, 소수를 입력하면 가장 간단한 분수로 변환해주는 단일 HTML 파일입니다.\n두 분수의 덧셈·뺄셈·곱셈·나눗셈 계산도 단계별 풀이 과정과 함께 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 49, level: "보통", title: "그래프 함수 시각화기", desc: "수학 함수식을 입력하면 그래프로 시각화해주는 도구", prompt: "▶ 49. [보통] 그래프 함수 시각화기\n\n함수 그래프 시각화 웹앱을 만들어 주세요.\ny=2x+1, y=x^2-3 같은 함수식을 텍스트로 입력하면 좌표 평면에 그래프를 그려주는 단일 HTML 파일입니다.\nx축 범위를 슬라이더로 조정할 수 있고, 여러 함수를 동시에 다른 색으로 그릴 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 50, level: "쉬움", title: "소수 판별기·소인수분해기", desc: "숫자를 입력하면 소수인지 판별하고 소인수분해 결과를 보여주는 도구", prompt: "▶ 50. [쉬움] 소수 판별기·소인수분해기\n\n소수 판별 및 소인수분해 웹앱을 만들어 주세요.\n숫자를 입력하면 소수인지 합성수인지 판별하고, 합성수라면 소인수분해 결과(예: 12 = 2² × 3)를 단계별로 보여주는 단일 HTML 파일입니다.\n두 수의 최대공약수(GCD)와 최소공배수(LCM)도 계산해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 51, level: "보통", title: "확률 시뮬레이터", desc: "주사위·동전·카드 등 확률 실험을 시뮬레이션하고 결과를 분석", prompt: "▶ 51. [보통] 확률 시뮬레이터\n\n확률 시뮬레이터 웹앱을 만들어 주세요.\n주사위 굴리기(1~6), 동전 던지기(앞/뒤), 카드 뽑기 중 선택해서 시행 횟수를 설정하면 결과를 시뮬레이션하고, 이론적 확률과 실제 결과 빈도를 막대그래프로 비교하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 52, level: "쉬움", title: "복리 이자 계산기", desc: "원금·이율·기간을 입력하면 복리 이자 수익을 계산하고 시각화", prompt: "▶ 52. [쉬움] 복리 이자 계산기\n\n복리 이자 계산기 웹앱을 만들어 주세요.\n원금, 연이율(%), 투자 기간(년), 이자 복리 주기(월/분기/년)를 입력하면 최종 금액, 총 이자, 연도별 자산 성장 그래프를 보여주는 단일 HTML 파일입니다.\n단리와 복리 비교도 한눈에 볼 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 88, level: "쉬움", title: "팁 계산기·더치페이 계산기", desc: "식사 금액과 팁 비율을 입력하면 1인당 부담 금액을 계산", prompt: "▶ 88. [쉬움] 팁 계산기·더치페이 계산기\n\n팁 계산기 & 더치페이 계산기 웹앱을 만들어 주세요.\n총 금액, 팁 비율(10%/15%/20%), 인원수를 입력하면 팁 포함 총액과 1인당 금액을 계산하는 단일 HTML 파일입니다.\n일부 인원이 다른 금액을 내는 맞춤 정산도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "게임·오락",
+    count: 7,
+    prompts: [
+      { id: 53, level: "쉬움", title: "가위바위보 게임", desc: "컴퓨터와 가위바위보를 하고 승패 기록을 저장하는 게임", prompt: "▶ 53. [쉬움] 가위바위보 게임\n\n가위바위보 게임 웹앱을 만들어 주세요.\n가위·바위·보 버튼을 클릭하면 컴퓨터가 랜덤으로 선택하고 승패를 결정하는 단일 HTML 파일입니다.\n현재 대결 점수(나 vs 컴퓨터), 총 승률 통계, 재미있는 승패 메시지 애니메이션이 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 54, level: "보통", title: "단어 맞히기 게임(행맨)", desc: "알파벳 또는 한글 단어를 하나씩 추측하며 맞히는 행맨 게임", prompt: "▶ 54. [보통] 단어 맞히기 게임(행맨)\n\n행맨(단어 맞히기) 게임 웹앱을 만들어 주세요.\n숨겨진 단어의 자리 수만 표시되고, 알파벳 버튼을 클릭해서 한 글자씩 추측하면 맞으면 단어에 표시, 틀리면 행맨 그림이 하나씩 완성되는 단일 HTML 파일입니다.\n카테고리별 단어 목록(동물·음식·나라)도 선택할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 55, level: "쉬움", title: "숫자 맞히기 게임", desc: "1~100 사이 숫자를 추측하면 높다/낮다 힌트를 주는 숫자 게임", prompt: "▶ 55. [쉬움] 숫자 맞히기 게임\n\n숫자 맞히기 게임 웹앱을 만들어 주세요.\n컴퓨터가 1~100 사이 숫자를 정하면 숫자를 입력할 때마다 '더 높게'/'더 낮게' 힌트를 주고, 정답을 맞히면 시도 횟수와 함께 축하 메시지를 보여주는 단일 HTML 파일입니다.\n최고 기록(최소 시도 횟수)도 저장해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 56, level: "보통", title: "기억력 카드 뒤집기 게임", desc: "짝이 맞는 카드를 뒤집어 찾는 기억력 카드 매칭 게임", prompt: "▶ 56. [보통] 기억력 카드 뒤집기 게임\n\n기억력 카드 매칭 게임 웹앱을 만들어 주세요.\n뒤집어진 카드를 두 장씩 클릭해서 같은 그림(이모지)을 맞히면 사라지고, 모두 맞히면 소요 시간과 시도 횟수를 보여주는 단일 HTML 파일입니다.\n4x4, 4x5 등 난이도 선택도 되면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 57, level: "쉬움", title: "사다리 타기 게임", desc: "참가자 이름을 입력하면 랜덤 사다리를 생성해 결과를 보여주는 게임", prompt: "▶ 57. [쉬움] 사다리 타기 게임\n\n사다리 타기 게임 웹앱을 만들어 주세요.\n참가자 이름 목록과 결과 목록(당번·선물·벌칙 등)을 입력하면 랜덤 사다리를 그려주고, 이름을 클릭하면 해당 참가자의 사다리 경로를 선으로 따라가며 결과를 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 58, level: "보통", title: "틱택토(삼목) 게임", desc: "두 명이 번갈아 O·X를 두는 틱택토 게임과 컴퓨터 대전 모드", prompt: "▶ 58. [보통] 틱택토(삼목) 게임\n\n틱택토(삼목) 게임 웹앱을 만들어 주세요.\n3x3 격자에 O와 X를 번갈아 두고 가로·세로·대각선으로 3개를 먼저 완성하면 이기는 단일 HTML 파일입니다.\n2인 모드와 컴퓨터 대전(기본·어려움) 모드를 선택할 수 있고 승패 기록도 저장해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 89, level: "쉬움", title: "스피드 클릭 테스트", desc: "제한 시간 안에 얼마나 빨리 클릭할 수 있는지 측정하는 반응속도 게임", prompt: "▶ 89. [쉬움] 스피드 클릭 테스트\n\n스피드 클릭 테스트 웹앱을 만들어 주세요.\n'시작' 버튼을 클릭하면 10초 카운트다운이 시작되고, 그 안에 버튼을 클릭한 횟수를 측정해서 CPS(초당 클릭 수)와 총 클릭 횟수를 보여주는 단일 HTML 파일입니다.\n최고 기록도 저장해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "학부모·육아",
+    count: 5,
+    prompts: [
+      { id: 59, level: "쉬움", title: "아이 성장 기록기", desc: "아이의 키·몸무게를 날짜별로 기록하고 성장 곡선으로 시각화", prompt: "▶ 59. [쉬움] 아이 성장 기록기\n\n아이 성장 기록 웹앱을 만들어 주세요.\n아이 이름, 생년월일, 날짜별 키(cm)·몸무게(kg)를 입력하면 월령별 성장 곡선 그래프와 최근 측정값을 보여주는 단일 HTML 파일입니다.\n또래 평균과 비교하는 참고 선도 표시해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 60, level: "보통", title: "아이 예방접종 스케줄러", desc: "아이 생년월일을 입력하면 예방접종 일정을 자동으로 계산해 알려주는 도구", prompt: "▶ 60. [보통] 아이 예방접종 스케줄러\n\n아이 예방접종 스케줄러 웹앱을 만들어 주세요.\n아이의 생년월일을 입력하면 BCG·B형간염·DPT 등 국가필수 예방접종 일정을 자동 계산해서 달력에 표시하고, 완료 여부를 체크할 수 있는 단일 HTML 파일입니다.\n다음 접종일까지 남은 날도 표시해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 61, level: "쉬움", title: "어린이 용돈 계산기", desc: "어린이 눈높이에 맞게 받은 용돈과 쓴 돈을 기록하는 용돈 기입장", prompt: "▶ 61. [쉬움] 어린이 용돈 계산기\n\n어린이 용돈 기입장 웹앱을 만들어 주세요.\n받은 용돈(이유, 금액)과 쓴 돈(무엇을 샀는지, 금액)을 입력하면 남은 용돈을 크게 보여주고, 저축 목표를 설정해서 달성률을 시각화하는 단일 HTML 파일입니다.\n어린이가 쓰기 쉽고 밝은 색상으로 만들어 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 62, level: "보통", title: "가족 일정 공유 캘린더", desc: "가족 구성원별 일정을 입력하고 월간 캘린더로 한눈에 보는 도구", prompt: "▶ 62. [보통] 가족 일정 공유 캘린더\n\n가족 일정 공유 캘린더 웹앱을 만들어 주세요.\n가족 구성원(엄마·아빠·자녀)을 추가하고, 일정 제목·날짜·시간·담당자를 입력하면 월간 캘린더에 구성원별 색상으로 표시되는 단일 HTML 파일입니다.\n이번 주 일정 요약도 따로 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 90, level: "쉬움", title: "동화 스토리 생성기", desc: "주인공 이름과 이야기 소재를 입력하면 짧은 창작 동화를 자동 생성", prompt: "▶ 90. [쉬움] 동화 스토리 생성기\n\n어린이 동화 스토리 생성기 웹앱을 만들어 주세요.\n주인공 이름, 성격(용감한·호기심 많은·착한), 이야기 배경(숲·우주·바다), 함께 등장할 친구 캐릭터를 입력하면 짧은 창작 동화 이야기를 자동으로 만들어주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "부동산·재테크",
+    count: 5,
+    prompts: [
+      { id: 63, level: "보통", title: "대출 상환 계산기", desc: "대출 원금·금리·기간을 입력하면 월 상환액과 총 이자를 계산", prompt: "▶ 63. [보통] 대출 상환 계산기\n\n대출 상환 계산기 웹앱을 만들어 주세요.\n대출 원금, 연이율(%), 대출 기간(개월)을 입력하면 원리금균등상환 방식의 월 상환액, 총 상환액, 총 이자, 기간별 원금/이자 비율 그래프를 보여주는 단일 HTML 파일입니다.\n중도 상환 시뮬레이션도 해주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 64, level: "쉬움", title: "월세·전세 비교 계산기", desc: "전세 보증금과 월세 조건을 비교해 어느 쪽이 유리한지 계산", prompt: "▶ 64. [쉬움] 월세·전세 비교 계산기\n\n월세·전세 비교 계산기 웹앱을 만들어 주세요.\n전세 보증금, 월세 보증금, 월세 금액, 내 자금, 대출 금리를 입력하면 기회비용과 실제 부담 비용을 계산해서 전세와 월세 중 어느 조건이 유리한지 비교해주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 65, level: "보통", title: "적금 만기 계산기", desc: "적금 금액·기간·이율을 입력하면 만기 시 수령액과 세후 금액을 계산", prompt: "▶ 65. [보통] 적금 만기 계산기\n\n적금 만기 계산기 웹앱을 만들어 주세요.\n월 납입액, 적금 기간(개월), 연이율(%), 세금 우대 여부를 입력하면 만기 원금 합계, 세전 이자, 세후 이자, 최종 수령액을 계산하는 단일 HTML 파일입니다.\n여러 적금 상품을 비교할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 66, level: "쉬움", title: "주택 구매 비용 계산기", desc: "집 구매 시 취득세·중개수수료 등 부대비용을 자동으로 계산", prompt: "▶ 66. [쉬움] 주택 구매 비용 계산기\n\n주택 구매 부대비용 계산기 웹앱을 만들어 주세요.\n매매 금액, 주택 유형(아파트·단독·빌라), 지역, 구매자 상황(생애최초 여부)을 입력하면 취득세, 법무사 비용, 중개수수료를 자동 계산해서 총 부대비용과 실제 필요 자금을 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 91, level: "쉬움", title: "용돈 저축 목표 달성 계산기", desc: "저축 목표 금액과 월 저축 가능액을 입력하면 달성까지 걸리는 기간을 계산", prompt: "▶ 91. [쉬움] 용돈 저축 목표 달성 계산기\n\n저축 목표 달성 계산기 웹앱을 만들어 주세요.\n목표 금액(예: 해외여행 200만 원), 현재 잔액, 월 저축 가능 금액을 입력하면 목표 달성까지 걸리는 개월 수와 예상 날짜를 계산하고, 월별 잔액 성장 그래프를 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "이벤트·행사",
+    count: 7,
+    prompts: [
+      { id: 67, level: "쉬움", title: "생일 파티 플래너", desc: "참석자 수와 예산을 입력하면 파티 준비 체크리스트를 자동 생성", prompt: "▶ 67. [쉬움] 생일 파티 플래너\n\n생일 파티 플래너 웹앱을 만들어 주세요.\n파티 날짜, 참석 인원, 예산, 파티 장소(집·식당·야외)를 입력하면 준비할 물품 체크리스트, 예상 비용 배분표, D-day 카운터를 보여주는 단일 HTML 파일입니다.\n파티 초대 문구 템플릿도 생성해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 68, level: "보통", title: "행사 참석자 관리 앱", desc: "행사 참석자 등록·확인·출석 체크를 관리하는 행사 운영 도구", prompt: "▶ 68. [보통] 행사 참석자 관리 앱\n\n행사 참석자 관리 웹앱을 만들어 주세요.\n참석자 이름, 연락처, 소속, 참석 여부를 입력해서 명단을 만들고, 당일 이름을 클릭하면 출석 체크가 되며, 현재 출석 인원과 미출석 인원을 실시간으로 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 69, level: "쉬움", title: "랜덤 팀 편성기", desc: "참가자 이름을 입력하면 공평하게 팀을 나눠주는 도구", prompt: "▶ 69. [쉬움] 랜덤 팀 편성기\n\n랜덤 팀 편성기 웹앱을 만들어 주세요.\n참가자 이름을 한 줄씩 입력하고 팀 수를 선택하면 공평하게 랜덤 배분해서 팀 목록을 보여주는 단일 HTML 파일입니다.\n팀별 색상 배지가 있고, 결과를 다시 섞는 '재편성' 버튼도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 70, level: "보통", title: "결혼식 좌석 배치 도구", desc: "하객 명단과 테이블 수를 입력하면 좌석 배치 계획을 시각화", prompt: "▶ 70. [보통] 결혼식 좌석 배치 도구\n\n결혼식 좌석 배치 웹앱을 만들어 주세요.\n하객 이름과 그룹(가족·친구·직장), 테이블 수와 테이블당 좌석 수를 입력하면 테이블 배치도를 시각화하고, 하객을 드래그해서 테이블 간 이동시킬 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 71, level: "쉬움", title: "룰렛·추첨 도구", desc: "참가자 이름을 입력하면 랜덤으로 당첨자를 뽑는 추첨 룰렛", prompt: "▶ 71. [쉬움] 룰렛·추첨 도구\n\n룰렛 추첨 도구 웹앱을 만들어 주세요.\n참가자 이름이나 항목을 입력하면 색상 조각으로 나뉜 룰렛 원판이 만들어지고, 돌리기 버튼을 클릭하면 회전 후 당첨자가 표시되는 단일 HTML 파일입니다.\n이미 당첨된 사람은 제외하고 다음 추첨을 할 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 72, level: "보통", title: "모임 날짜 조율 앱", desc: "여러 후보 날짜와 참가자 가능 여부를 입력하면 최적 날짜를 찾아주는 도구", prompt: "▶ 72. [보통] 모임 날짜 조율 앱\n\n모임 날짜 조율 웹앱을 만들어 주세요.\n후보 날짜를 여러 개 입력하고, 참가자 이름과 각 날짜 가능 여부(O/△/X)를 표시하면 가장 많은 사람이 가능한 날짜를 자동으로 추천하는 단일 HTML 파일입니다.\n결과를 카카오톡 메시지 형식으로 복사하는 버튼도 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 92, level: "쉬움", title: "선물 추천 아이디어 생성기", desc: "받는 사람의 나이·성별·관계·예산을 입력하면 선물 아이디어를 자동 추천", prompt: "▶ 92. [쉬움] 선물 추천 아이디어 생성기\n\n선물 추천 아이디어 생성기 웹앱을 만들어 주세요.\n받는 사람의 나이, 성별, 관계(부모님·친구·연인·직장동료), 예산, 취미를 입력하면 카테고리별 선물 아이디어 10개와 구매 시 참고할 팁을 자동으로 생성하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "환경·날씨",
+    count: 5,
+    prompts: [
+      { id: 73, level: "쉬움", title: "탄소 발자국 계산기", desc: "일상 활동별 탄소 배출량을 입력하면 나의 탄소 발자국을 계산", prompt: "▶ 73. [쉬움] 탄소 발자국 계산기\n\n탄소 발자국 계산기 웹앱을 만들어 주세요.\n교통(자동차·대중교통·비행기), 식생활(육식·채식), 에너지 사용(전기·가스)을 입력하면 연간 탄소 배출량(CO2 kg)을 계산하고, 나무 몇 그루에 해당하는지, 한국 평균과 비교하면 어느 수준인지 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 74, level: "보통", title: "에너지 절약 계산기", desc: "가전제품 사용 현황을 입력하면 전기 요금과 절약 방법을 분석", prompt: "▶ 74. [보통] 에너지 절약 계산기\n\n에너지 절약 계산기 웹앱을 만들어 주세요.\n냉장고·에어컨·TV·세탁기 등 가전제품을 선택하고 일일 사용 시간과 대수를 입력하면 월간 전력 사용량(kWh), 예상 전기 요금, 제품별 절약 팁을 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 75, level: "쉬움", title: "식물 물주기 알림 관리기", desc: "식물 이름과 물주기 주기를 입력하면 다음 물주기 날짜를 알려주는 도구", prompt: "▶ 75. [쉬움] 식물 물주기 알림 관리기\n\n식물 물주기 관리 웹앱을 만들어 주세요.\n식물 이름, 종류, 마지막 물 준 날짜, 물주기 주기(며칠마다)를 입력하면 다음 물주기 날짜까지 남은 일수를 보여주고, 오늘 물줘야 할 식물 목록을 상단에 강조하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 76, level: "보통", title: "날씨 일기 기록기", desc: "날마다 날씨와 기온을 기록하고 월별 날씨 패턴을 시각화하는 도구", prompt: "▶ 76. [보통] 날씨 일기 기록기\n\n날씨 일기 기록 웹앱을 만들어 주세요.\n날짜별로 날씨(맑음·흐림·비·눈), 최고·최저 기온, 날씨 한줄 메모를 입력하면 달력에 날씨 아이콘으로 표시되고, 월별 강수일 수와 기온 변화 그래프를 보여주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 93, level: "쉬움", title: "분리수거 가이드 앱", desc: "쓰레기 종류를 입력하면 올바른 분리수거 방법을 알려주는 도구", prompt: "▶ 93. [쉬움] 분리수거 가이드 앱\n\n분리수거 가이드 웹앱을 만들어 주세요.\n버리고 싶은 물건 이름(예: 피자 박스, 음료 캔, 오래된 전자제품)을 입력하면 어느 쓰레기통에 넣어야 하는지, 세척이나 분리가 필요한지, 특수 처리 방법이 있는지를 알려주는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  },
+  {
+    name: "소셜·커뮤니티",
+    count: 6,
+    prompts: [
+      { id: 77, level: "쉬움", title: "익명 투표 생성기", desc: "투표 항목을 입력하면 링크로 공유 가능한 간단한 투표 도구 생성", prompt: "▶ 77. [쉬움] 익명 투표 생성기\n\n간단한 투표 생성기 웹앱을 만들어 주세요.\n투표 제목과 선택지를 입력하면 투표 페이지가 만들어지고, 선택지를 클릭하면 실시간으로 투표 결과 막대그래프가 업데이트되는 단일 HTML 파일입니다.\n총 투표 수와 각 선택지 비율(%)도 표시해 주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 78, level: "쉬움", title: "감사 편지 생성기", desc: "받는 사람과 감사 이유를 입력하면 진심 어린 감사 편지 문구를 생성", prompt: "▶ 78. [쉬움] 감사 편지 생성기\n\n감사 편지 생성기 웹앱을 만들어 주세요.\n받는 사람(이름·관계), 감사한 이유, 원하는 분위기(따뜻한·공식적·유머러스)를 입력하면 진심 어린 감사 편지 문구 3가지를 자동 생성하고 복사할 수 있는 단일 HTML 파일입니다.\n이모지와 함께 카드 형식으로 꾸밀 수 있으면 좋겠습니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 79, level: "보통", title: "공동 구매 정산기", desc: "공동 구매 참가자와 금액을 입력하면 각자 부담할 금액을 자동 계산", prompt: "▶ 79. [보통] 공동 구매 정산기\n\n공동 구매 정산 웹앱을 만들어 주세요.\n공동 구매 상품명, 총 금액, 참가자 목록(이름·수량)을 입력하면 배송비 포함 1인당 부담 금액을 계산하고, 취합 진행 상황(입금 완료 여부)을 체크할 수 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 80, level: "보통", title: "칭찬 스티커 보드", desc: "팀원에게 칭찬 스티커를 붙여주고 이달의 MVP를 뽑는 도구", prompt: "▶ 80. [보통] 칭찬 스티커 보드\n\n팀 칭찬 스티커 보드 웹앱을 만들어 주세요.\n팀원 이름을 추가하고, 칭찬 이유와 함께 스티커(별·하트·엄지)를 붙여주면 이름별 스티커 개수가 쌓이고, 이달 스티커 가장 많은 MVP를 자동으로 표시하는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 94, level: "쉬움", title: "생일 축하 메시지 생성기", desc: "받는 사람과 관계를 입력하면 개성 있는 생일 축하 메시지를 자동 생성", prompt: "▶ 94. [쉬움] 생일 축하 메시지 생성기\n\n생일 축하 메시지 생성기 웹앱을 만들어 주세요.\n받는 사람 이름, 관계(친구·부모님·직장동료·연인), 나이, 분위기(유머·감동·심플)를 입력하면 카카오톡이나 문자로 바로 보낼 수 있는 생일 축하 메시지 5개를 자동 생성하고 복사 버튼이 있는 단일 HTML 파일입니다.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." },
+      { id: 100, level: "보통", title: "소원 위시리스트 공유 앱", desc: "갖고 싶은 것, 하고 싶은 것을 입력하고 우선순위를 정해 관리하는 위시리스트", prompt: "▶ 100. [보통] 소원 위시리스트 공유 앱\n\n소원 위시리스트 웹앱을 만들어 주세요.\n갖고 싶은 것·하고 싶은 것·이루고 싶은 것을 카테고리별로 입력하고, 우선순위(꼭·언젠간·여유 되면)와 예상 금액/기간을 설정하면 목록 카드로 보여주는 단일 HTML 파일입니다.\n완료된 소원은 '이뤘어요!' 처리하고 달성률도 보여주세요.\n가능하다면 시각 자료, 체크리스트 또는 인터랙티브한 것처럼 함께 볼 수 있는 무언가를 만들어 주세요." }
+    ]
+  }
+];
+
+// ===== INTRO SEQUENCE =====
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function runIntroSequence() {
+  const overlay = document.getElementById('introOverlay');
+  const counter = document.getElementById('introCounter');
+  const barFill = document.getElementById('introBarFill');
+
+  // Phase 1: 카운트다운 100 → 0 (빠르게)
+  const steps = [100, 87, 73, 60, 48, 35, 21, 10, 5, 3, 1, 0];
+  for (let i = 0; i < steps.length; i++) {
+    counter.textContent = steps[i];
+    barFill.style.width = ((steps.length - 1 - i) / (steps.length - 1) * 100) + '%';
+    await sleep(120);
+  }
+  await sleep(300);
+
+  // Phase 2: 오버레이 페이드아웃
+  overlay.classList.add('fade-out');
+  await sleep(600);
+  overlay.classList.add('hidden');
+
+  // Phase 3: 히어로 글자 하나씩 등장
+  await revealHeroText();
+}
+
+async function revealHeroText() {
+  // 글자 span 준비
+  const lines = document.querySelectorAll('.hero-line');
+  const allChars = [];
+
+  lines.forEach((line) => {
+    const text = line.dataset.text;
+    line.innerHTML = '';
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === ' ') {
+        const space = document.createTextNode('\u00A0');
+        line.appendChild(space);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = ch;
+        line.appendChild(span);
+        allChars.push({ span, line });
+      }
+    }
+  });
+
+  // 한 글자씩 순차 등장
+  for (let i = 0; i < allChars.length; i++) {
+    allChars[i].span.classList.add('show');
+    await sleep(50);
+  }
+
+  // 모든 글자 안정화 (settled 상태로 전환 → 애니메이션 제거, 고정)
+  await sleep(400);
+  allChars.forEach(({ span }) => {
+    span.classList.remove('show');
+    span.classList.add('settled');
+  });
+
+  // 레드 라인 글로우 효과
+  const accentLine = document.querySelector('.hero-line.accent');
+  if (accentLine) accentLine.classList.add('glow');
+
+  // Phase 4: 서브타이틀 + UI 요소 순차 등장
+  await sleep(200);
+  document.querySelector('.hero-sub').classList.add('show');
+  await sleep(300);
+  document.querySelector('.hero-sub-small').classList.add('show');
+  await sleep(300);
+  document.querySelector('.top-bar .brand').classList.add('show');
+  await sleep(150);
+  document.querySelector('.btn-guide').classList.add('show');
+  await sleep(150);
+  document.querySelector('.scroll-cta').classList.add('show');
+}
+
+// ===== SPIRAL ANIMATION ENGINE =====
+const Spiral = (() => {
+  let canvas, ctx, dpr, W, H, size;
+  let time = 0, animId = null;
+  let stars = [];
+  const NUM_STARS = 5000;
+  const TRAIL = 80;
+  const CAM_Z = -400;
+  const CAM_TRAVEL = 3400;
+  const DOT_Y_OFF = 28;
+  const VIEW_ZOOM = 100;
+  const CHANGE_T = 0.32;
+  let speed = 1;
+  let startTime = null;
+
+  function ease(p, g) {
+    return p < 0.5 ? 0.5 * Math.pow(2 * p, g) : 1 - 0.5 * Math.pow(2 * (1 - p), g);
+  }
+  function easeOutElastic(x) {
+    const c4 = (2 * Math.PI) / 4.5;
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    return Math.pow(2, -8 * x) * Math.sin((x * 8 - 0.75) * c4) + 1;
+  }
+  function map(v, a, b, c, d) { return c + (d - c) * ((v - a) / (b - a)); }
+  function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+  function lerp(a, b, t) { return a * (1 - t) + b * t; }
+
+  function spiralPath(p) {
+    p = clamp(1.2 * p, 0, 1);
+    p = ease(p, 1.8);
+    const turns = 6, theta = 2 * Math.PI * turns * Math.sqrt(p), r = 170 * Math.sqrt(p);
+    return { x: r * Math.cos(theta), y: r * Math.sin(theta) + DOT_Y_OFF };
+  }
+
+  function projectDot(pos3, sf) {
+    const t2 = clamp(map(time, CHANGE_T, 1, 0, 1), 0, 1);
+    const camZ = CAM_Z + ease(Math.pow(t2, 1.2), 1.8) * CAM_TRAVEL;
+    if (pos3.z > camZ) {
+      const depth = pos3.z - camZ;
+      const x = VIEW_ZOOM * pos3.x / depth;
+      const y = VIEW_ZOOM * pos3.y / depth;
+      const sw = 400 * sf / depth;
+      ctx.beginPath();
+      ctx.arc(x, y, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  class Star {
+    constructor() {
+      this.angle = Math.random() * Math.PI * 2;
+      this.dist = 30 * Math.random() + 15;
+      this.rotDir = Math.random() > 0.5 ? 1 : -1;
+      this.expRate = 1.2 + Math.random() * 0.8;
+      this.finalScale = 0.7 + Math.random() * 0.6;
+      this.dx = this.dist * Math.cos(this.angle);
+      this.dy = this.dist * Math.sin(this.angle);
+      this.spiralLoc = (1 - Math.pow(1 - Math.random(), 3)) / 1.3;
+      this.z = lerp(
+        CAM_Z * 0.5 + Math.random() * (CAM_TRAVEL + CAM_Z * 0.5),
+        CAM_TRAVEL / 2,
+        0.3 * this.spiralLoc
+      );
+      this.swf = Math.pow(Math.random(), 2);
+    }
+    render() {
+      const sp = spiralPath(this.spiralLoc);
+      const q = time / (1 / speed) - this.spiralLoc;
+      if (q <= 0) return;
+      const dp = clamp(4 * q, 0, 1);
+      const lin = dp, elast = easeOutElastic(dp), pw = dp * dp;
+      let eg;
+      if (dp < 0.3) eg = lerp(lin, pw, dp / 0.3);
+      else if (dp < 0.7) eg = lerp(pw, elast, (dp - 0.3) / 0.4);
+      else eg = elast;
+
+      let sx, sy;
+      if (dp < 0.3) {
+        sx = lerp(sp.x, sp.x + this.dx * 0.3, eg / 0.3);
+        sy = lerp(sp.y, sp.y + this.dy * 0.3, eg / 0.3);
+      } else if (dp < 0.7) {
+        const mp = (dp - 0.3) / 0.4;
+        const cs = Math.sin(mp * Math.PI) * this.rotDir * 1.5;
+        const bx = sp.x + this.dx * 0.3, by = sp.y + this.dy * 0.3;
+        const tx = sp.x + this.dx * 0.7, ty = sp.y + this.dy * 0.7;
+        sx = lerp(bx, tx, mp) + (-this.dy * 0.4 * cs) * mp;
+        sy = lerp(by, ty, mp) + (this.dx * 0.4 * cs) * mp;
+      } else {
+        const fp = (dp - 0.7) / 0.3;
+        const bx = sp.x + this.dx * 0.7, by = sp.y + this.dy * 0.7;
+        const td = this.dist * this.expRate * 1.5;
+        const sa = this.angle + 1.2 * this.rotDir * fp * Math.PI;
+        const tx = sp.x + td * Math.cos(sa), ty = sp.y + td * Math.sin(sa);
+        sx = lerp(bx, tx, fp);
+        sy = lerp(by, ty, fp);
+      }
+
+      const vx = (this.z - CAM_Z) * sx / VIEW_ZOOM;
+      const vy = (this.z - CAM_Z) * sy / VIEW_ZOOM;
+      let sm = dp < 0.6 ? 1 + dp * 0.2 : lerp(1.2, this.finalScale, (dp - 0.6) / 0.4);
+      projectDot({ x: vx, y: vy, z: this.z }, 8.5 * this.swf * sm);
+    }
+  }
+
+  function drawTrail() {
+    const t1 = clamp(map(time, 0, CHANGE_T + 0.25, 0, 1), 0, 1);
+    for (let i = 0; i < TRAIL; i++) {
+      const f = map(i, 0, TRAIL, 1.1, 0.1);
+      const sw = (1.3 * (1 - t1) + 3 * Math.sin(Math.PI * t1)) * f;
+      const pt = t1 - 0.00015 * i;
+      const p = spiralPath(pt);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function render(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = (ts - startTime) / 1000;
+    time = (elapsed * speed / 15) % 1;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, size, size);
+    ctx.save();
+    ctx.translate(size / 2, size / 2);
+
+    const t1 = clamp(map(time, 0, CHANGE_T + 0.25, 0, 1), 0, 1);
+    const t2 = clamp(map(time, CHANGE_T, 1, 0, 1), 0, 1);
+    ctx.rotate(-Math.PI * ease(t2, 2.7));
+
+    ctx.fillStyle = 'white';
+    drawTrail();
+    for (const s of stars) s.render();
+
+    // start dot
+    if (time > CHANGE_T) {
+      const dy = CAM_Z * DOT_Y_OFF / VIEW_ZOOM;
+      projectDot({ x: 0, y: dy, z: CAM_TRAVEL }, 2.5);
+    }
+
+    ctx.restore();
+    animId = requestAnimationFrame(render);
+  }
+
+  function init() {
+    canvas = document.getElementById('spiralCanvas');
+    if (!canvas) return;
+    ctx = canvas.getContext('2d');
+    dpr = window.devicePixelRatio || 1;
+    resize();
+
+    // seeded random for stars
+    const origRandom = Math.random;
+    let seed = 1234;
+    Math.random = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    for (let i = 0; i < NUM_STARS; i++) stars.push(new Star());
+    Math.random = origRandom;
+
+    animId = requestAnimationFrame(render);
+    window.addEventListener('resize', resize);
+  }
+
+  function resize() {
+    const hero = document.getElementById('hero');
+    W = hero.offsetWidth;
+    H = hero.offsetHeight;
+    size = Math.max(W, H);
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function destroy() {
+    if (animId) cancelAnimationFrame(animId);
+    window.removeEventListener('resize', resize);
+  }
+
+  return { init, destroy };
+})();
+
+// ===== STICKY HEADER =====
+function initStickyHeader() {
+  const hero = document.getElementById('hero');
+  const sticky = document.getElementById('stickyHeader');
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      sticky.classList.toggle('visible', !entry.isIntersecting);
+    },
+    { threshold: 0, rootMargin: '-80px 0px 0px 0px' }
+  );
+  observer.observe(hero);
+}
+
+// ===== SECTION COUNT ANIMATION =====
+function initSectionCount() {
+  const el = document.getElementById('sectionCount');
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        el.classList.add('visible');
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.5 }
+  );
+  observer.observe(el);
+}
+
+// ===== ACCORDION =====
+function renderAccordion() {
+  const container = document.getElementById('accordionContainer');
+  categories.forEach((cat, catIdx) => {
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+
+    const header = document.createElement('div');
+    header.className = 'accordion-header';
+    header.innerHTML = `
+      <div class="accordion-icon"></div>
+      <div class="accordion-title">${cat.name}</div>
+      <div class="accordion-count">${cat.count}</div>
+      <div class="accordion-arrow">&#9654;</div>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'accordion-body';
+    const inner = document.createElement('div');
+    inner.className = 'accordion-body-inner';
+
+    cat.prompts.forEach((p, pIdx) => {
+      const card = document.createElement('div');
+      card.className = 'prompt-card';
+      card.dataset.level = p.level;
+      const badgeClass = p.level === '쉬움' ? 'badge-easy' : 'badge-normal';
+      const numStr = String(p.id).padStart(2, '0');
+
+      card.innerHTML = `
+        <div class="card-top">
+          <span class="badge ${badgeClass}">${p.level}</span>
+          <span class="card-number">#${numStr}</span>
+        </div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-actions">
+          <button class="btn-preview" onclick="togglePreview(this)">
+            &#9662; 미리보기
+          </button>
+          <button class="btn-copy" onclick="copyPrompt(this, ${catIdx}, ${pIdx})">
+            <span class="copy-icon">&#128203;</span> 복사
+          </button>
+        </div>
+        <div class="prompt-preview">${p.prompt}</div>
+      `;
+      inner.appendChild(card);
+    });
+
+    body.appendChild(inner);
+    item.appendChild(header);
+    item.appendChild(body);
+    container.appendChild(item);
+
+    header.addEventListener('click', () => toggleAccordion(header, body, inner));
+  });
+}
+
+function toggleAccordion(header, body, inner) {
+  const isOpen = header.classList.contains('active');
+
+  if (isOpen) {
+    header.classList.remove('active');
+    body.style.maxHeight = '0';
+  } else {
+    header.classList.add('active');
+    body.style.maxHeight = inner.scrollHeight + 40 + 'px';
+
+    // stagger card reveal
+    const cards = inner.querySelectorAll('.prompt-card');
+    cards.forEach((card, i) => {
+      card.classList.remove('revealed');
+      card.style.animationDelay = `${i * 0.04}s`;
+      // force reflow
+      void card.offsetWidth;
+      card.classList.add('revealed');
+    });
+  }
+}
+
+// ===== TOGGLE ALL =====
+let allOpen = false;
+function toggleAll() {
+  allOpen = !allOpen;
+  const btn = document.getElementById('btnToggleAll');
+  btn.textContent = allOpen ? '전체 접기' : '전체 펼치기';
+
+  document.querySelectorAll('.accordion-item').forEach(item => {
+    const header = item.querySelector('.accordion-header');
+    const body = item.querySelector('.accordion-body');
+    const inner = item.querySelector('.accordion-body-inner');
+
+    if (allOpen) {
+      header.classList.add('active');
+      body.style.maxHeight = inner.scrollHeight + 40 + 'px';
+      inner.querySelectorAll('.prompt-card').forEach((card, i) => {
+        card.classList.remove('revealed');
+        card.style.animationDelay = `${i * 0.02}s`;
+        void card.offsetWidth;
+        card.classList.add('revealed');
+      });
+    } else {
+      header.classList.remove('active');
+      body.style.maxHeight = '0';
+    }
+  });
+}
+
+// ===== PREVIEW =====
+function togglePreview(btn) {
+  const card = btn.closest('.prompt-card');
+  const preview = card.querySelector('.prompt-preview');
+  const isOpen = preview.classList.contains('open');
+
+  if (isOpen) {
+    preview.classList.remove('open');
+    btn.classList.remove('active');
+    btn.innerHTML = '&#9662; 미리보기';
+  } else {
+    preview.classList.add('open');
+    btn.classList.add('active');
+    btn.innerHTML = '&#9652; 접기';
+  }
+
+  // 아코디언 높이 재계산
+  const accordionBody = card.closest('.accordion-body');
+  const inner = accordionBody.querySelector('.accordion-body-inner');
+  if (accordionBody) {
+    setTimeout(() => {
+      accordionBody.style.maxHeight = inner.scrollHeight + 40 + 'px';
+    }, 50);
+  }
+}
+
+// ===== COPY =====
+function copyPrompt(btn, catIdx, pIdx) {
+  const p = categories[catIdx].prompts[pIdx];
+  const text = p.prompt;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.createElement('span');
+    toast.className = 'copy-toast';
+    toast.textContent = '복사 완료!';
+    btn.appendChild(toast);
+    setTimeout(() => toast.remove(), 800);
+  });
+}
+
+// ===== MODAL =====
+function openModal() {
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initStickyHeader();
+  initSectionCount();
+  renderAccordion();
+  Spiral.init();
+  runIntroSequence();
+});
+</script>
+</body>
+</html>
