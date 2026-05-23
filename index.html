@@ -740,7 +740,7 @@ body::before {
   padding: 0 14px;
 }
 .prompt-preview.open {
-  max-height: 500px;
+  max-height: 1400px;
   padding: 14px;
   margin-top: 12px;
   border-left-color: var(--red);
@@ -808,6 +808,182 @@ body::before {
   .hero-sub, .hero-sub-small, .scroll-cta,
   .top-bar .brand, .btn-guide { opacity: 1; }
   .prompt-card { opacity: 1; }
+}
+
+/* ===== DESIGN COLOR PICKER ===== */
+.design-color {
+  background: var(--black);
+  padding: 28px 20px 44px;
+  border-top: 1px solid #111;
+  position: relative;
+  z-index: 4;
+}
+.design-color-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.design-color-label {
+  font-family: var(--font-accent);
+  font-size: 16px;
+  letter-spacing: 5px;
+  color: var(--text-gray);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.design-color-label::before,
+.design-color-label::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--text-dim);
+  display: inline-block;
+}
+.design-color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+}
+.palette-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 6px 6px 4px;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  transition: background 0.2s ease;
+}
+.palette-item:hover { background: rgba(255,255,255,0.04); }
+.palette-item:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+.palette-swatch {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-a) 0%, var(--c-a) 50%, var(--c-b) 50%, var(--c-b) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  outline: 2px solid transparent;
+  outline-offset: 4px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, outline-color 0.25s ease;
+}
+.palette-item:hover .palette-swatch { transform: scale(1.06); }
+.palette-item.selected .palette-swatch {
+  outline-color: var(--white);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 0 24px rgba(255,255,255,0.22);
+}
+.palette-name {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-gray);
+  transition: color 0.2s ease;
+}
+.palette-item.selected .palette-name {
+  color: var(--white);
+}
+.design-color-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.4px;
+  text-align: center;
+  max-width: 560px;
+  line-height: 1.65;
+}
+.design-color-desc strong {
+  color: var(--white);
+  font-weight: 500;
+}
+.design-color-desc .active-name {
+  color: var(--red);
+  font-weight: 500;
+}
+@media (max-width: 480px) {
+  .design-color { padding: 24px 14px 36px; }
+  .design-color-swatches { gap: 14px; }
+  .palette-swatch { width: 48px; height: 48px; }
+  .palette-name { font-size: 11px; letter-spacing: 0.5px; }
+  .design-color-label { font-size: 14px; letter-spacing: 3px; }
+  .design-color-label::before,
+  .design-color-label::after { width: 22px; }
+}
+
+/* ===== CARD SLUG (영어 폴더·레포명) ===== */
+.card-slug {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-gray);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #2a2a2a;
+  padding: 1px 7px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: 2px;
+  cursor: help;
+}
+.prompt-card:hover .card-slug {
+  color: var(--white);
+  border-color: var(--royal-blue);
+}
+
+/* ===== PROMPT PREVIEW: body + tone 분리 ===== */
+.prompt-body {
+  white-space: pre-wrap;
+}
+.prompt-tone {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.025);
+  border-left: 3px solid var(--tone-accent, var(--red));
+  border-radius: 0 4px 4px 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text-gray);
+  animation: toneFadeIn 0.28s ease both;
+}
+.prompt-tone[data-active="false"] {
+  display: none;
+}
+.prompt-tone-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.prompt-tone-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--tone-a, #000) 0%, var(--tone-a, #000) 50%, var(--tone-b, #fff) 50%, var(--tone-b, #fff) 100%);
+  border: 1px solid rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}
+.prompt-tone-label {
+  font-family: var(--font-accent);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--white);
+}
+.prompt-tone-body {
+  white-space: pre-wrap;
+}
+@keyframes toneFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
@@ -1721,6 +1897,275 @@ const categories = [
 ];
 
 
+// ===== VIBE-CODING PRD CONVERTER =====
+// 시리즈 1의 14개 카테고리에 맞춘 입출력 힌트
+const ioByCategory = {
+  '일상생활': '입력: 일상 데이터(수입·지출·습관·일정 등) / 출력: 입력 폼 + 자동 계산·기록 화면 + 다운로드/공유',
+  '업무·생산성': '입력: 작업·시간·우선순위 / 출력: 보드·표·타임라인 + 진척 표시',
+  '교육·학습': '입력: 학습 주제·단어·진도 / 출력: 카드·퀴즈·진척 표 + 정답률',
+  '건강·피트니스': '입력: 운동·식단·신체수치 / 출력: 일일 기록·차트·목표 진척',
+  '요리·음식': '입력: 재료·인원·기간 / 출력: 레시피·장보기 리스트·시간표',
+  '여행·취미': '입력: 목적지·기간·예산·인원 / 출력: 일정·체크리스트·지출 표',
+  '창작·미디어': '입력: 주제·톤·길이 / 출력: 텍스트·이미지 설명·캡션 후보 3개',
+  '수학·계산': '입력: 수치·단위·조건 / 출력: 계산 결과·표·간단한 시각화',
+  '게임·오락': '입력: 인원·난이도·라운드 수 / 출력: 게임 보드·점수·랜덤 결과',
+  '학부모·육아': '입력: 아이 나이·관심사·기록 / 출력: 추천 활동·체크리스트·성장 표',
+  '부동산·재테크': '입력: 금액·기간·이율·조건 / 출력: 시뮬레이션 표·그래프·요약',
+  '이벤트·행사': '입력: 날짜·인원·예산 / 출력: 체크리스트·초대장·타임라인',
+  '환경·날씨': '입력: 위치·날짜·관심 지표 / 출력: 카드·알림·요약',
+  '소셜·커뮤니티': '입력: 모임 정보·인원·주제 / 출력: 안내문·일정·공지 카드'
+};
+
+function makeVibePrd(cat, p) {
+  const io = ioByCategory[cat.name] || '입력: 자유 텍스트 / 출력: 마크다운 결과';
+  return `너는 바이브코딩 첫 도구를 함께 짜는 PM 겸 풀스택 엔지니어야.
+비전공자가 "${p.title}" 한 페이지 웹 도구를 만들려고 한다. 아래 PRD를 받아 [원하는 출력]을 채워줘.
+
+[한 페이지 PRD]
+- 도구 이름: ${p.title}
+- 폴더·레포명: ${p.slug}
+- 한 줄 컨셉: ${p.desc}
+- 사용 영역: ${cat.name}
+- 누가 쓰나: 본인 또는 가까운 한 사람 (혼자~소수)
+- 입출력 힌트: ${io}
+- 출시 형태: 정적 HTML 1파일 (선택: Vercel 배포)
+
+[원하는 출력 — 순서대로]
+① 한 줄 컨셉 재진술 (12~16자, 명사구)
+② 1주 안에 만들 MVP 기능 3개 (각 1줄)
+③ "v2 이후"로 미루는 기능 2~3개 (각 1줄, 이유 1단어)
+④ 첫 화면 텍스트 와이어프레임 (모바일 360px, 10줄 이내)
+⑤ 파일 구조 (HTML 1파일이면 그대로 명시. 분리 필요 시 이유와 함께)
+⑥ 결정이 필요한 빈칸 3개 (각 1줄 질문, 단순 디자인 취향 말고 진짜 결정)
+
+[제약]
+- 외부 유료 API 금지. 무료 키 필요 시 "키 필요" 명시.
+- 라이브러리는 CDN 1~2개까지.
+- 데이터는 localStorage 또는 다운로드(.json/.csv) 우선.
+- 첫 커밋에 README가 들어가야 한다.
+
+[자체 점검 — 응답 마지막에 별도 블록]
+- MVP 3개가 모두 1주 안에 가능한가
+- 입력·출력 데이터 예시가 한 줄 이상 들어 있는가
+- "v2" 블록이 별도로 정리되어 있는가
+- 빈칸 질문이 진짜 결정이 필요한 것인가`;
+}
+
+// 100개 도구의 폴더·레포명 슬러그 (kebab-case, 짧고 쉬운 영어)
+const slugById = {
+  // 1. 일상생활 (10)
+  1: 'budget-tracker', 2: 'dday-counter', 3: 'shopping-list', 4: 'habit-tracker',
+  5: 'timer-stopwatch', 6: 'reading-log', 7: 'unit-converter', 8: 'diary-app',
+  81: 'random-menu', 99: 'pet-health-log',
+  // 2. 업무·생산성 (10)
+  9: 'todo-list', 10: 'kanban-board', 11: 'meeting-agenda', 12: 'timeline-viewer',
+  13: 'card-organizer', 14: 'time-tracker', 15: 'password-checker', 16: 'email-signature',
+  82: 'work-journal', 95: 'meeting-cost-calc',
+  // 3. 교육·학습 (10)
+  17: 'flashcard-study', 18: 'quiz-app', 19: 'multiplication-drill', 20: 'mindmap-visual',
+  21: 'geography-quiz', 22: 'spelling-practice', 23: 'typing-speed', 24: 'learning-tracker',
+  83: 'hanja-practice', 96: 'history-timeline',
+  // 4. 건강·피트니스 (8)
+  25: 'bmi-calculator', 26: 'calorie-counter', 27: 'water-intake-log', 28: 'workout-timer',
+  29: 'step-goal-calc', 30: 'sleep-tracker', 84: 'eye-rest-timer', 98: 'meditation-timer',
+  // 5. 요리·음식 (6)
+  31: 'recipe-saver', 32: 'pantry-manager', 33: 'portion-calculator',
+  34: 'meal-planner', 35: 'coffee-guide', 85: 'leftover-recipes',
+  // 6. 여행·취미 (7)
+  36: 'trip-expense-split', 37: 'travel-checklist', 38: 'timezone-converter',
+  39: 'photo-album-sorter', 40: 'hobby-expense-log', 41: 'book-club-manager',
+  86: 'travel-bucket-list',
+  // 7. 창작·미디어 (8)
+  42: 'random-writing-prompt', 43: 'youtube-script-gen', 44: 'color-palette-gen',
+  45: 'social-posting-plan', 46: 'nickname-generator', 47: 'quote-collection',
+  87: 'quote-card-maker', 97: 'survey-builder',
+  // 8. 수학·계산 (6)
+  48: 'fraction-converter', 49: 'graph-visualizer', 50: 'prime-factorizer',
+  51: 'probability-sim', 52: 'compound-interest', 88: 'tip-dutch-calc',
+  // 9. 게임·오락 (7)
+  53: 'rps-game', 54: 'hangman-game', 55: 'number-guess',
+  56: 'memory-card-game', 57: 'ladder-lottery', 58: 'tictactoe-game',
+  89: 'click-speed-test',
+  // 10. 학부모·육아 (5)
+  59: 'child-growth-log', 60: 'vaccine-scheduler', 61: 'kids-allowance',
+  62: 'family-calendar', 90: 'storybook-gen',
+  // 11. 부동산·재테크 (5)
+  63: 'loan-repayment', 64: 'rent-compare', 65: 'savings-maturity',
+  66: 'home-buy-cost', 91: 'savings-goal',
+  // 12. 이벤트·행사 (7)
+  67: 'party-planner', 68: 'event-guest-mgr', 69: 'team-randomizer',
+  70: 'seating-chart', 71: 'roulette-raffle', 72: 'meeting-scheduler',
+  92: 'gift-idea-gen',
+  // 13. 환경·날씨 (5)
+  73: 'carbon-footprint', 74: 'energy-savings', 75: 'plant-water-log',
+  76: 'weather-diary', 93: 'recycling-guide',
+  // 14. 소셜·커뮤니티 (6)
+  77: 'anonymous-voting', 78: 'thank-you-letter', 79: 'group-buy-settle',
+  80: 'praise-board', 94: 'birthday-greeting', 100: 'wishlist-sharing'
+};
+
+// 100개 모두 PRD 시작 프롬프트로 일괄 교체 + 슬러그 주입
+categories.forEach(cat => {
+  cat.prompts.forEach(p => {
+    p.slug = slugById[p.id] || ('tool-' + p.id);
+    p.prompt = makeVibePrd(cat, p);
+  });
+});
+
+
+// ===== DESIGN COLOR PALETTE =====
+const palettes = [
+  {
+    id: 'navy-gold', name: '네이비·골드',
+    hexA: '#0A1F44', hexA_name: '딥 네이비',
+    hexB: '#D4A84B', hexB_name: '클래식 골드',
+    mood: '격식 있고 신중한 톤. 단정한 명사형 종결, 군더더기 없는 한 문장.',
+    usage: '제목·KPI·CTA는 골드, 본문/표 헤더는 네이비, 배경은 흰색. 보조는 연회색(#EEE).'
+  },
+  {
+    id: 'pink-cream', name: '핑크·크림',
+    hexA: '#E8A2B0', hexA_name: '더스티 핑크',
+    hexB: '#FBE9D7', hexB_name: '소프트 크림',
+    mood: '부드럽고 친근한 라이프스타일 톤. 어조는 따뜻하게, 이모지는 최소한.',
+    usage: '주요 강조는 핑크, 배경·카드는 크림, 텍스트는 진한 차콜(#2B2B2B).'
+  },
+  {
+    id: 'mono', name: '모노톤',
+    hexA: '#0A0A0A', hexA_name: '잉크 블랙',
+    hexB: '#F2F2F2', hexB_name: '오프 화이트',
+    mood: '담백한 미니멀·테크 톤. 객관 사실 위주, 형용사 절제, 표/숫자 중심.',
+    usage: '거의 모든 요소는 무채색. 강조는 굵기·여백·라인 두께로만 차등.'
+  },
+  {
+    id: 'forest', name: '포레스트',
+    hexA: '#1E3A2C', hexA_name: '딥 포레스트',
+    hexB: '#E5DBC4', hexB_name: '오트 베이지',
+    mood: 'ESG·지속가능성 톤. 신중하고 사실 중심, 과장된 수식어 자제.',
+    usage: '헤드라인·아이콘은 포레스트, 본문 배경은 베이지, 차트 보조는 머스터드(#C9A23A).'
+  },
+  {
+    id: 'ocean', name: '오션',
+    hexA: '#0C3F5F', hexA_name: '딥 오션',
+    hexB: '#98C4DE', hexB_name: '스카이 라이트',
+    mood: '신뢰감·정돈 톤. 정확한 수치 표현, 모호한 표현 금지, 두 자리 소수 유지.',
+    usage: '강조는 딥 오션, 보조 차트·태그는 스카이 라이트, 위험 표시는 코랄(#E08366) 예외.'
+  },
+  {
+    id: 'cherry', name: '체리',
+    hexA: '#7A1426', hexA_name: '와인 체리',
+    hexB: '#F1D2D5', hexB_name: '블러시 핑크',
+    mood: '활기·강조 톤. CTA는 강한 동사, 헤드라인은 12자 이내, 숫자 강조.',
+    usage: 'CTA·세일 배지·핵심 카피는 체리, 카드 배경은 블러시, 본문은 차콜(#1A1A1A).'
+  }
+];
+
+let selectedPaletteId = null;
+
+function renderPalettes() {
+  const container = document.getElementById('paletteSwatches');
+  if (!container) return;
+  palettes.forEach(p => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'palette-item';
+    item.setAttribute('role', 'radio');
+    item.setAttribute('aria-checked', 'false');
+    item.setAttribute('aria-label', p.name + ' 톤 선택');
+    item.dataset.paletteId = p.id;
+    const swatch = document.createElement('span');
+    swatch.className = 'palette-swatch';
+    swatch.style.setProperty('--c-a', p.hexA);
+    swatch.style.setProperty('--c-b', p.hexB);
+    const nameEl = document.createElement('span');
+    nameEl.className = 'palette-name';
+    nameEl.textContent = p.name;
+    item.appendChild(swatch);
+    item.appendChild(nameEl);
+    item.addEventListener('click', () => selectPalette(p.id));
+    container.appendChild(item);
+  });
+}
+
+function selectPalette(id) {
+  if (selectedPaletteId === id) selectedPaletteId = null;
+  else selectedPaletteId = id;
+  document.querySelectorAll('.palette-item').forEach(el => {
+    const active = el.dataset.paletteId === selectedPaletteId;
+    el.classList.toggle('selected', active);
+    el.setAttribute('aria-checked', active ? 'true' : 'false');
+  });
+  const current = document.getElementById('paletteCurrent');
+  if (current) {
+    current.textContent = '';
+    const p = palettes.find(x => x.id === selectedPaletteId);
+    if (p) {
+      const lead = document.createTextNode(' 현재 선택: ');
+      const name = document.createElement('span');
+      name.className = 'active-name';
+      name.textContent = p.name;
+      current.appendChild(lead);
+      current.appendChild(name);
+    }
+  }
+  updateToneBoxes();
+  recalcOpenAccordions();
+}
+
+function updateToneBoxes() {
+  const p = palettes.find(x => x.id === selectedPaletteId);
+  document.querySelectorAll('.prompt-tone').forEach(tone => {
+    while (tone.firstChild) tone.removeChild(tone.firstChild);
+    if (!p) { tone.dataset.active = 'false'; return; }
+    tone.dataset.active = 'true';
+    tone.style.setProperty('--tone-accent', p.hexA);
+    tone.style.setProperty('--tone-a', p.hexA);
+    tone.style.setProperty('--tone-b', p.hexB);
+    const head = document.createElement('div');
+    head.className = 'prompt-tone-head';
+    const dot = document.createElement('span');
+    dot.className = 'prompt-tone-dot';
+    const label = document.createElement('span');
+    label.className = 'prompt-tone-label';
+    label.textContent = 'DESIGN TONE — ' + p.name;
+    head.appendChild(dot);
+    head.appendChild(label);
+    const body = document.createElement('div');
+    body.className = 'prompt-tone-body';
+    body.textContent = [
+      '· 팔레트: ' + p.hexA_name + '(' + p.hexA + ') + ' + p.hexB_name + '(' + p.hexB + ')',
+      '· 시각 결과물(차트·표·대시보드·이미지·슬라이드): ' + p.usage,
+      '· 글 결과물(이메일·보고서·카피): ' + p.mood,
+      '· 위 톤이 적용 불가한 텍스트만의 결과물이면 본 가이드는 무시.'
+    ].join('\n');
+    tone.appendChild(head);
+    tone.appendChild(body);
+  });
+}
+
+function recalcOpenAccordions() {
+  document.querySelectorAll('.accordion-header.active').forEach(header => {
+    const body = header.nextElementSibling;
+    if (!body) return;
+    const inner = body.querySelector('.accordion-body-inner');
+    if (!inner) return;
+    body.style.maxHeight = (inner.scrollHeight + 40) + 'px';
+  });
+}
+
+function buildPaletteBlock() {
+  const p = palettes.find(x => x.id === selectedPaletteId);
+  if (!p) return '';
+  return [
+    '', '', '---',
+    `[디자인 톤: ${p.name}]`,
+    `· 팔레트: ${p.hexA_name}(${p.hexA}) + ${p.hexB_name}(${p.hexB})`,
+    `· 시각 결과물(차트·표·대시보드·이미지·슬라이드): ${p.usage}`,
+    `· 글 결과물(이메일·보고서·카피): ${p.mood}`,
+    `· 위 톤이 적용 불가한 텍스트만의 결과물이면 본 가이드는 무시.`
+  ].join('\n');
+}
+
+
 // ===== INTRO SEQUENCE =====
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -2057,6 +2502,10 @@ function initPalette() {
       try { localStorage.setItem('vibe-preset', id); } catch (_) {}
       chips.forEach(c => c.classList.toggle('selected', c.dataset.preset === id));
       refreshOpenPreviews();
+      // 새 톤 시스템에도 동기화 (미리보기 안 톤 박스 + 복사 시 부착)
+      selectedPaletteId = id;
+      updateToneBoxes();
+      recalcOpenAccordions();
     });
   });
 }
@@ -2069,7 +2518,9 @@ function refreshOpenPreviews() {
     const ci = +card.dataset.ci;
     const pi = +card.dataset.pi;
     const raw = categories[ci] && categories[ci].prompts[pi] && categories[ci].prompts[pi].prompt;
-    if (raw != null) el.textContent = applyPreset(raw, preset);
+    // prompt-body만 갱신 (prompt-tone 박스는 별도 시스템이 관리)
+    const body = el.querySelector('.prompt-body');
+    if (raw != null && body) body.textContent = applyPreset(raw, preset);
   });
 }
 
@@ -2108,7 +2559,7 @@ function renderAccordion() {
           <span class="badge ${badgeClass}">${p.level}</span>
           <span class="card-number">#${numStr}</span>
         </div>
-        <div class="card-title">${p.title}</div>
+        <div class="card-title">${p.title} <span class="card-slug" title="폴더·레포명으로 그대로 사용 가능">${p.slug}</span></div>
         <div class="card-desc">${p.desc}</div>
         <div class="card-actions">
           <button class="btn-preview" onclick="togglePreview(this)">
@@ -2118,7 +2569,10 @@ function renderAccordion() {
             <span class="copy-icon">&#128203;</span> 복사
           </button>
         </div>
-        <div class="prompt-preview">${p.prompt}</div>
+        <div class="prompt-preview">
+          <div class="prompt-body">${p.prompt}</div>
+          <div class="prompt-tone" data-active="false"></div>
+        </div>
       `;
       inner.appendChild(card);
     });
@@ -2196,11 +2650,14 @@ function togglePreview(btn) {
     preview.classList.add('open');
     btn.classList.add('active');
     btn.textContent = '▴ 접기';
-    // 활성 프리셋 적용한 텍스트로 갱신
+    // 활성 프리셋 적용한 텍스트로 갱신 (prompt-body만 — prompt-tone 박스는 보존)
     const ci = +card.dataset.ci;
     const pi = +card.dataset.pi;
     const raw = categories[ci] && categories[ci].prompts[pi] && categories[ci].prompts[pi].prompt;
-    if (raw != null) preview.textContent = applyPreset(raw, PRESETS[activePreset]);
+    if (raw != null) {
+      const body = preview.querySelector('.prompt-body');
+      if (body) body.textContent = applyPreset(raw, PRESETS[activePreset]);
+    }
   }
 
   // 아코디언 높이 재계산
@@ -2216,13 +2673,15 @@ function togglePreview(btn) {
 // ===== COPY =====
 function copyPrompt(btn, catIdx, pIdx) {
   const p = categories[catIdx].prompts[pIdx];
-  const text = applyPreset(p.prompt, PRESETS[activePreset]);
+  // 새 PRD에는 hex 코드가 없으므로 applyPreset은 사실상 noop이지만 보존(추후 PRD에 hex가 다시 들어갈 경우 대비).
+  // 디자인 톤은 buildPaletteBlock()로 PRD 끝에 부착.
+  const text = applyPreset(p.prompt, PRESETS[activePreset]) + buildPaletteBlock();
   navigator.clipboard.writeText(text).then(() => {
     const toast = document.createElement('span');
     toast.className = 'copy-toast';
-    toast.textContent = '복사 완료!';
+    toast.textContent = selectedPaletteId ? '복사 완료 (톤 포함)' : '복사 완료!';
     btn.appendChild(toast);
-    setTimeout(() => toast.remove(), 800);
+    setTimeout(() => toast.remove(), 900);
   });
 }
 
@@ -2246,6 +2705,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initSectionCount();
   renderAccordion();
   initPalette();
+  // 초기 톤 박스 동기화 (palette-chip의 활성 프리셋과 일치)
+  selectedPaletteId = activePreset;
+  updateToneBoxes();
+  recalcOpenAccordions();
   Spiral.init();
   runIntroSequence();
 });
